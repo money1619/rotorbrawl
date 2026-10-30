@@ -618,9 +618,19 @@ end
 Renderer.stationProps = Renderer.stationProps or {}   -- [nom] = { ent, x, y, z }
 local stationSignature, stationGeneration = nil, 0
 
+-- Gradins d'une table (variante de config avec `stands`) : modèle à poser aux mêmes coordonnées et au même cap
+local function standsModelFor(tableModel)
+    local variants = SpinArena and SpinArena.Config and SpinArena.Config.arenaVariants
+    for _, v in pairs(variants or {}) do
+        if v.model == tableModel and type(v.stands) == 'table' and type(v.stands.model) == 'string' then return v.stands.model end
+    end
+    return nil
+end
+
 local function clearStationProps()
     stationGeneration = stationGeneration + 1
     for name, sp in pairs(Renderer.stationProps) do
+        if sp.stands then safeDeleteObject(sp.stands); sp.stands = nil end
         local scene = nil
         for _, sc in pairs(scenes) do
             if sc.arenaPropBorrowed and sc.arenaProp == sp.ent then scene = sc end
@@ -635,12 +645,98 @@ local function clearStationProps()
         Renderer.stationProps[name] = nil
     end
     stationSignature = nil
+    if Renderer.forgetStationDescs then Renderer.forgetStationDescs() end
 end
 Renderer.clearStationProps = clearStationProps
 if type(AddEventHandler) == 'function' then
     AddEventHandler('onResourceStop', function(name)
         if type(GetCurrentResourceName) == 'function' and name == GetCurrentResourceName() then clearStationProps() end
     end)
+end
+
+-- Descriptions des stations (même signature que les props) : un décor n'est créé que si le joueur est assez près (30/10).
+-- Un hall éloigné (le Dôme) ou une table à l'autre bout de la carte ne coûte donc rien à ceux qui n'en sont pas voisins.
+local stationDescs, stationOrder = {}, {}   -- stationOrder : noms dans l'ordre de la liste (pose déterministe)
+function Renderer.forgetStationDescs() stationDescs, stationOrder = {}, {} end
+
+local function stationStreamRadius()
+    local r = SpinArena and SpinArena.Config and tonumber(SpinArena.Config.stationStreamRadius)
+    return r or 250.0
+end
+
+local function playerCoords()
+    if type(PlayerPedId) ~= 'function' or type(GetEntityCoords) ~= 'function' then return nil end
+    local ok, c = pcall(function() return GetEntityCoords(PlayerPedId()) end)
+    if ok and c and c.x then return c end
+    return nil
+end
+
+local function spawnStation(name, desc, generation)
+    local x, y, z, heading, stModel = desc.x, desc.y, desc.z, desc.heading, desc.model
+    local function attempt(tries)
+        if generation ~= stationGeneration or stationDescs[name] ~= desc or not desc.wanted then return end
+        local obj, done = spawnLocalProp(stModel, x, y, z, heading)
+        if generation ~= stationGeneration or stationDescs[name] ~= desc or not desc.wanted then safeDeleteObject(obj) return end
+        if obj then
+            -- Cuvette de station : solide (collision embarquée dans spin_arena_bowl*.ydr) ; les cuvettes des
+            -- combats improvisés restent sans collision car elles apparaissent sous les joueurs
+            if type(SetEntityCollision) == 'function' then pcall(SetEntityCollision, obj, true, true) end
+            local sp = { ent = obj, x = x, y = y, z = z, heading = heading, model = stModel }
+            Renderer.stationProps[name] = sp
+            local standsModel = standsModelFor(stModel)
+            if standsModel then
+                local function attemptStands(n)
+                    if generation ~= stationGeneration or Renderer.stationProps[name] ~= sp then return end
+                    local s2, sdone = spawnLocalProp(standsModel, x, y, z, heading)
+                    if generation ~= stationGeneration or Renderer.stationProps[name] ~= sp then safeDeleteObject(s2) return end
+                    if s2 then
+                        if type(SetEntityCollision) == 'function' then pcall(SetEntityCollision, s2, true, true) end
+                        sp.stands = s2
+                    elseif not sdone and n < 50 and type(SetTimeout) == 'function' then
+                        SetTimeout(100, function() attemptStands(n + 1) end)
+                    end
+                end
+                attemptStands(0)
+            end
+        elseif not done and tries < 50 and type(SetTimeout) == 'function' then
+            SetTimeout(100, function() attempt(tries + 1) end) -- modèle en cours de chargement
+        end
+    end
+    attempt(0)
+end
+
+-- Retire le décor d'une station éloignée (sauf si un combat en cours l'a emprunté)
+local function despawnStation(name)
+    local sp = Renderer.stationProps[name]
+    if not sp then return end
+    for _, sc in pairs(scenes) do
+        if sc.arenaPropBorrowed and sc.arenaProp == sp.ent then return end
+    end
+    if activeScene and activeScene.arenaPropBorrowed and activeScene.arenaProp == sp.ent then return end
+    if sp.stands then safeDeleteObject(sp.stands); sp.stands = nil end
+    safeDeleteObject(sp.ent)
+    Renderer.stationProps[name] = nil
+end
+
+-- Pose les décors des stations proches et retire ceux des stations éloignées (hystérésis de 25 % contre les va-et-vient)
+function Renderer.updateStationStreaming()
+    local radius = stationStreamRadius()
+    local c = playerCoords()
+    local unlimited = radius <= 0 or not c
+    local generation = stationGeneration
+    for _, name in ipairs(stationOrder) do
+        local desc = stationDescs[name]
+        local d2 = c and ((c.x - desc.x) ^ 2 + (c.y - desc.y) ^ 2) or 0
+        if unlimited or d2 <= radius * radius then
+            if not desc.wanted then
+                desc.wanted = true
+                spawnStation(name, desc, generation)
+            end
+        elseif desc.wanted and d2 > (radius * 1.25) ^ 2 then
+            desc.wanted = false
+            despawnStation(name)
+        end
+    end
 end
 
 function Renderer.syncStationProps(stations, model)
@@ -658,29 +754,27 @@ function Renderer.syncStationProps(stations, model)
     if signature == stationSignature then return end
     clearStationProps()
     stationSignature = signature
-    local generation = stationGeneration
+    stationDescs, stationOrder = {}, {}
     for _, st in ipairs(stations) do
         if type(st) == 'table' and type(st.name) == 'string' and tonumber(st.x) and tonumber(st.y) and tonumber(st.z) then
-            local name, x, y, z, heading = st.name, tonumber(st.x), tonumber(st.y), tonumber(st.z), tonumber(st.heading) or 0.0
             local stModel = (type(st.model) == 'string' and st.model ~= '' and st.model)
                 or (type(st.arena) == 'table' and type(st.arena.model) == 'string' and st.arena.model ~= '' and st.arena.model)
                 or model or 'spin_arena_bowl'
-            local function attempt(tries)
-                if generation ~= stationGeneration then return end
-                local obj, done = spawnLocalProp(stModel, x, y, z, heading)
-                if generation ~= stationGeneration then safeDeleteObject(obj) return end
-                if obj then
-                    -- Cuvette de station : solide (collision embarquée dans spin_arena_bowl*.ydr) ; les cuvettes des
-                    -- combats improvisés restent sans collision car elles apparaissent sous les joueurs
-                    if type(SetEntityCollision) == 'function' then pcall(SetEntityCollision, obj, true, true) end
-                    Renderer.stationProps[name] = { ent = obj, x = x, y = y, z = z, model = stModel }
-                elseif not done and tries < 50 and type(SetTimeout) == 'function' then
-                    SetTimeout(100, function() attempt(tries + 1) end) -- modèle en cours de chargement
-                end
-            end
-            attempt(0)
+            if not stationDescs[st.name] then stationOrder[#stationOrder + 1] = st.name end
+            stationDescs[st.name] = { x = tonumber(st.x), y = tonumber(st.y), z = tonumber(st.z), heading = tonumber(st.heading) or 0.0, model = stModel }
         end
     end
+    Renderer.updateStationStreaming()
+end
+
+-- Vérifie la distance une fois par seconde (le joueur se déplace, les stations non)
+if type(CreateThread) == 'function' and type(Wait) == 'function' then
+    CreateThread(function()
+        while true do
+            Wait(1000)
+            if next(stationDescs) then pcall(Renderer.updateStationStreaming) end
+        end
+    end)
 end
 
 -- Cuvette de station au centre de l'arène du combat (à 0,5 m près), réutilisable par la scène si même modèle
@@ -1009,6 +1103,21 @@ function Renderer.getScene(matchId)
     return matchId and scenes[matchId] or nil
 end
 
+-- Vues pour les écrans du Dôme (client/dome_screens.lua) : une par scène suivie, avec la dernière keyframe reçue
+-- (positions locales d'arène). Lecture seule : rien n'est copié, l'appelant ne modifie pas les tables.
+function Renderer.liveViews()
+    local out = {}
+    for id, sc in pairs(scenes) do
+        local frames = sc.frames
+        local last = type(frames) == 'table' and frames[#frames] or nil
+        out[#out + 1] = {
+            id = id, state = sc.state, round = sc.round, score = sc.score, names = sc.names, meta = sc.tops,
+            arena = sc.arena, outcome = sc.outcome, tops = last and last.tops or nil,
+        }
+    end
+    return out
+end
+
 local function notifyCountdownPreparation(scene)
     -- Le lanceur est en main dès la préparation (le joueur vise pendant le mini-jeu), puis pendant le compte à rebours
     if not scene or (scene.state ~= 'countdown' and scene.state ~= 'preparing') then return end
@@ -1017,7 +1126,7 @@ local function notifyCountdownPreparation(scene)
         local mySide = tonumber(scene.side) or 1
         local myTop = scene.tops and scene.tops[mySide]
         local modelName = myTop and (myTop.model or ('spin_top_' .. tostring(myTop.family or 'balance'))) or 'spin_top_balance'
-        launcher.onCountdownStart(scene.matchId, scene.round, scene.role, modelName, myTop and myTop.dir, myTop and myTop.parts)
+        launcher.onCountdownStart(scene.matchId, scene.round, scene.role, modelName, myTop and myTop.dir, myTop and myTop.parts, myTop and myTop.launcher)
     end
 end
 
@@ -1398,6 +1507,7 @@ local function onMatchOne(payload)
             family = t.family and tostring(t.family) or nil,
             model  = t.model and tostring(t.model) or nil,
             parts  = SpinArena and SpinArena.TopModel and SpinArena.TopModel.normalize(t.parts) or nil,   -- pièces → modèles assemblés
+            launcher = (type(t.launcher) == 'string' and t.launcher:match('^%w+$') and #t.launcher <= 24) and t.launcher or nil,   -- type de lanceur en main
         }
     end
 

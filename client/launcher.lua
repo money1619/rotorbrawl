@@ -218,6 +218,17 @@ local function readTopMaxZ(modelName)
     return Launcher.PROPS.mount.topHeight
 end
 
+-- Modèle 3D d'un type de lanceur : spin_launcher (Cordon) ou spin_launcher_<type> ; le modèle de base si celui-là est absent
+-- du jeu (édition gratuite, ressource incomplète)
+function Launcher.modelFor(launcherType)
+    local base = Launcher.PROPS.launcherModel
+    if type(launcherType) ~= 'string' or launcherType == '' or launcherType == 'cord' or not launcherType:match('^%w+$') then return base end
+    local name = base .. '_' .. launcherType
+    local hash = resolveModelHash(name)
+    if hash and type(IsModelInCdimage) == 'function' and isTruthy(IsModelInCdimage(hash)) then return name end
+    return base
+end
+
 -- Crée ce qui manque (le chargement des modèles est asynchrone : réessayé à chaque passage du fil d'animation)
 local function ensureProps()
     local ped = pedId()
@@ -239,7 +250,7 @@ local function ensureProps()
         return
     end
     if not Launcher.handProp then
-        local obj = spawnProp(ped, P.launcherModel)
+        local obj = spawnProp(ped, Launcher.modelFor(Launcher.launcherType))
         if obj then
             Launcher.handProp = obj
             attachLauncher()
@@ -407,7 +418,7 @@ end
 
 -- Démarre (ou reprend après chargement différé du modèle/dictionnaire) la posture de préparation
 -- dir : sens de rotation de sa toupie (1, ou -1 avec l'anneau inversé), pour l'emballement sur le lanceur
-function Launcher.onCountdownStart(matchId, round, role, topModelName, dir, topParts)
+function Launcher.onCountdownStart(matchId, round, role, topModelName, dir, topParts, launcherType)
     if role ~= 'participant' then
         return false
     end
@@ -426,6 +437,7 @@ function Launcher.onCountdownStart(matchId, round, role, topModelName, dir, topP
         Launcher.stage        = 'ready'
         Launcher.topModelName = topModelName or Launcher.topModelName or 'spin_top_balance'
         Launcher.topParts     = topParts
+        Launcher.launcherType = launcherType
         Launcher.cordLen, Launcher.tension, Launcher.rps, Launcher.spinAng, Launcher.pull = 0.0, 0.0, 0.0, 0.0, nil
         Launcher.history[#Launcher.history + 1] = {
             action  = 'prepare',

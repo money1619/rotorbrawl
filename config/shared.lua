@@ -143,6 +143,10 @@ SpinArena.Config = {
     -- chaque table affiche noms, score et manche
     debugTelemetry = false,
 
+    -- Distance (m) à laquelle le décor d'une table fixe est posé chez le joueur ; au delà de 1,25 fois cette distance il est retiré.
+    -- Une table (ou le hall d'une extension) loin de tout joueur ne coûte donc ni mémoire ni objets. 0 = toutes les tables, toujours.
+    stationStreamRadius = 250.0,
+
     -- Pièces qui ont une icône dédiée dans ox_inventory/web/images (spin_part_<id>.png) : rempli avec les fichiers
     -- d'icônes (lot visuel). Purement visuel : ne change ni les identifiants ni les stats. Vide = image générique.
     -- Lot visuel : planche Money (install/icons_money/CORRESPONDANCE.md) et trois icônes originales ajoutées

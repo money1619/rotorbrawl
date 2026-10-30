@@ -86,10 +86,10 @@ local function mountTop(entry)
 end
 
 -- Crée ce qui manque (modèles chargés de façon asynchrone : réessayé à chaque image)
-local function ensureProps(entry, topModel, topParts)
+local function ensureProps(entry, topModel, topParts, launcherType)
     local L = launcherMod()
     if not entry.launcher then
-        entry.launcher = L.spawnProp(entry.ped, L.PROPS.launcherModel)
+        entry.launcher = L.spawnProp(entry.ped, L.modelFor(launcherType))
         if entry.launcher then attachLauncher(entry) end
     end
     if entry.launcher and not entry.top and not entry.flight and topModel then
@@ -163,7 +163,7 @@ function Rivals.sync(scene, now, dt)
             local meta = scene.tops and scene.tops[i] or {}
             local dir = (tonumber(meta.dir) == -1) and -1 or 1
             if scene.state ~= 'playing' then
-                ensureProps(entry, meta.model or ('spin_top_' .. tostring(meta.family or 'balance')), meta.parts)
+                ensureProps(entry, meta.model or ('spin_top_' .. tostring(meta.family or 'balance')), meta.parts, meta.launcher)
                 local ready = type(scene.ready) == 'table' and scene.ready[i] == true
                 entry.rps = entry.rps + ((ready and Rivals.READY_RPS or 0.0) - entry.rps) * clamp(dt * 3.0, 0.0, 1.0)
                 if entry.rps > 0.05 then

@@ -41,13 +41,14 @@ end
 
 -- Ce que le client affiche d'une toupie ; `model` = objet 3D choisi d'après l'anneau monté (Stats.model), sinon
 -- celui de sa famille (toupies de test) : stream/spin_top_<forme>.ydr
-local function topHeader(def)
+local function topHeader(def, launcher)
     local parts
     if type(def.parts) == 'table' then   -- les quatre identifiants du catalogue : le client assemble la toupie pièce par pièce
         parts = { core = def.parts.core, ring = def.parts.ring, frame = def.parts.frame, tip = def.parts.tip }
     end
     return { r = def.stats.r, label = def.label, color = def.color, dir = def.stats.dir,
-             model = def.model or ('spin_top_' .. (def.family or 'balance')), parts = parts }
+             model = def.model or ('spin_top_' .. (def.family or 'balance')), parts = parts,
+             launcher = launcher }   -- type du lanceur de ce joueur : modèle 3D en main (affichage seulement)
 end
 
 -- Joueurs réels du match (l'adversaire simulé d'un entraînement n'a pas de client)
@@ -86,7 +87,7 @@ local function simArena(arena)
     local base = SpinArena.Config.testArena
     return { R = arena.R or base.R, h = arena.h or base.h, pockets = arena.pockets or base.pockets,
              model = arena.model or base.model, floorHeight = arena.floorHeight or base.floorHeight,
-             railBoost = arena.railBoost }
+             railBoost = arena.railBoost, power = arena.power }
 end
 
 -- En-tête de manche adapté au destinataire (rôle, côté, délai de départ ou temps déjà écoulé)
@@ -111,7 +112,7 @@ local function header(match, src)
         srcs = { p1.bot and 0 or (tonumber(p1.src) or 0), p2.bot and 0 or (tonumber(p2.src) or 0) },
         practice = match.practice or nil,
         arena = arenaPayload(match.arena),
-        tops = { topHeader(p1.def), topHeader(p2.def) },
+        tops = { topHeader(p1.def, p1.launcher), topHeader(p2.def, p2.launcher) },
         dt = SpinArena.Config.dt, keyframeEvery = SpinArena.Config.keyframeEvery,
     }
 end

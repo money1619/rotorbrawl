@@ -145,6 +145,11 @@ function Shop.locations()
         for _, e in ipairs(fixed) do points[#points + 1] = { x = e.x, y = e.y, z = e.z + 1.0, label = e.name } end
     end
     for _, p in ipairs(cfg().locations) do points[#points + 1] = { x = p.x, y = p.y, z = p.z, label = p.label, heading = p.heading, ped = p.ped } end
+    -- Points de vente des extensions (server/extensions.lua), validés à l'enregistrement
+    local Ext = SpinArena.Extensions
+    for _, p in ipairs(Ext and Ext.shopPoints and Ext.shopPoints() or {}) do
+        points[#points + 1] = { x = p.x, y = p.y, z = p.z, label = p.label, heading = p.heading, ped = p.ped }
+    end
     return points
 end
 
@@ -349,6 +354,13 @@ function Shop.info(src)
         catalog = Shop.active and Shop.catalog() or {},
         money = (Shop.active and src) and money(src) or nil,
     }
+end
+
+-- Versement d'espèces par le serveur (gains de tournoi) : même chemin que le remboursement d'un achat
+function Shop.pay(src, amount)
+    amount = math.floor(tonumber(amount) or 0)
+    if amount <= 0 then return false end
+    return Store.credit(src, amount) and true or false
 end
 
 SpinArena.Shop = Shop

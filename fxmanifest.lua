@@ -2,11 +2,10 @@ fx_version 'cerulean'
 game 'gta5'
 author 'AEOM Development'
 lua54 'yes'
-dependency 'aeom-bridge'   -- pont centralise (27 oct. 2026), demarre avant cette ressource
 
 name 'SPIN ARENA'
 description '[Édition gratuite] Combats de toupies mécaniques : duels autoritaires, assemblages, boutique, arènes et classement persistant.'
-version '0.5.1'
+version '0.6.0'
 
 -- framework (ESX / QBCore / Qbox), inventaire (ox complet ; qs / qb par menus) et ciblage (ox_target / qb-target)
 -- détectés par bridge/
@@ -70,6 +69,8 @@ server_scripts {
     'server/parts.lua',
     'server/shop.lua',
     'server/pro_stub.lua',
+    'server/admin_panel.lua',
+    'server/selfcheck.lua',
     'server/main.lua',
     'server/debug.lua',
 }
@@ -91,5 +92,6 @@ client_scripts {
     'client/nui.lua',
     'client/launch.lua',
     'client/hologram.lua',
+    'client/admin_panel.lua',
     'client/summary.lua',
 }

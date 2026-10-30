@@ -77,7 +77,8 @@ SpinArena.ServerConfig = {
         -- Arènes fixes posées par la config (en plus de celles créées en jeu avec /spin_admin arena add) :
         -- { name = 'plage', x = -1600.0, y = -1100.0, z = 13.0, heading = 90.0, bucket = 0, variant = 'turbo' }
         -- variant : standard (par défaut) ou une variante de config/shared.lua arenaVariants. Retrait : supprimer la ligne.
-        fixedList = {},
+        fixedList = {
+        },
         maxZoneRadius = 200.0,
     },
 

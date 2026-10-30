@@ -99,6 +99,12 @@ local function validate(params)
     if not inRange(arena.R, 0.2, 5) then return 'arena.R' end
     if not inRange(arena.h, 0, 0.5) then return 'arena.h' end
     if arena.railBoost ~= nil and not inRange(arena.railBoost, 0, 20) then return 'arena.railBoost' end
+    -- Mode puissance d'une table (grande arène de tournoi) : les DEUX toupies sont lancées plus vite (v) et tournent plus fort (w)
+    if arena.power ~= nil then
+        if type(arena.power) ~= 'table' then return 'arena.power' end
+        if not inRange(arena.power.v or 1, 1, 1.5) then return 'arena.power.v' end
+        if not inRange(arena.power.w or 1, 1, 1.3) then return 'arena.power.w' end
+    end
     if type(arena.pockets) ~= 'table' or #arena.pockets > 12 then return 'arena.pockets' end
     for i = 1, #arena.pockets do
         local p = arena.pockets[i]
@@ -186,6 +192,7 @@ function Engine.newRound(params)
     round.turboSteps = math.ceil((c.turboWindow or 0) / dt - 1e-9)
     local startSpread, radiusJitter = c.startSpread or 0, c.startRadiusJitter or 0
     local flowerJitter = c.flowerJitter or 0
+    local pv, pw = arena.power and arena.power.v or 1, arena.power and arena.power.w or 1   -- mode puissance (même pour les deux)
 
     -- Départ : positions à peu près opposées, angle de départ tiré au sort ; chaque toupie reçoit son propre
     -- écart d'angle et de rayon (startSpread, startRadiusJitter) pour qu'aucune manche ne commence pareil
@@ -205,9 +212,9 @@ function Engine.newRound(params)
             m = s.m, r = s.r, kI = s.kI, atk = s.atk, def = s.def, stab = s.stab,
             tipFric = s.tipFric, mob = s.mob, trac = s.trac, damp = s.damp, dir = s.dir,
             x = ux * rad, y = uy * rad,
-            vx = s.v0 * (math.cos(alpha) * tx - math.sin(alpha) * ux),
-            vy = s.v0 * (math.cos(alpha) * ty - math.sin(alpha) * uy),
-            w = s.w0 * (1 + rng:range(-c.w0Jitter, c.w0Jitter)),
+            vx = s.v0 * pv * (math.cos(alpha) * tx - math.sin(alpha) * ux),
+            vy = s.v0 * pv * (math.cos(alpha) * ty - math.sin(alpha) * uy),
+            w = s.w0 * pw * (1 + rng:range(-c.w0Jitter, c.w0Jitter)),
             ang = 0, wob = 0, status = SPINNING, stopSince = nil, wobFlag = false,
             burstRes = s.burst or 0.5, dash = s.dash or 0,
             dashUntil = -1, dashCool = -1, lastHitStep = nil, lastHitDash = false, burst = false,

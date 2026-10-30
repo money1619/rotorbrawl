@@ -4,7 +4,6 @@
 --   Inventaires : ox_inventory, qs-inventory, qb-inventory (+ ps / lj), ESX -> Inv.*
 --   Ciblage : ox_target, qb-target                                          -> Target.*
 -- Detection automatique ; forcer avec Config.Bridge = { framework = ..., inventory = ..., target = 'ox'|'qb' }
--- Source unique : D:\FXServer\tools\aeom_bridge (ne pas modifier la copie d'un script sans reporter le changement).
 
 local cfg = (rawget(_G, 'Config') or {}).Bridge or {}
 

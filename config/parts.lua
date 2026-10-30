@@ -48,7 +48,9 @@ SpinArena.Parts = {
         tip_sharp  = { slot = 'tip', label = 'Embout Aiguille', cost = 30, mods = { tipFric = -1.0, mob = -0.45, trac = -0.5, damp = 0.15, stab = 0.1 } },
         tip_flat   = { slot = 'tip', label = 'Embout Plat', cost = 30, mods = { tipFric = 0.6, mob = 0.5, trac = 0.5, dash = 0.7 } },
         tip_ball   = { slot = 'tip', label = 'Embout Bille', cost = 25, mods = { tipFric = -0.6, def = 0.1, dash = 0.15 } },
-        tip_rubber = { slot = 'tip', label = 'Embout Gomme', cost = 35, mods = { tipFric = 0.5, mob = 0.4, trac = 1.2, damp = -0.1, stab = 0.1, dash = 0.5 } },
+        -- 30/10 : la gomme accroche (trac) sans freiner la rotation : son tipFric +0,5 faisait perdre la Mobilité au temps
+        -- presque partout (tests/family_balance_test.lua)
+        tip_rubber = { slot = 'tip', label = 'Embout Gomme', cost = 35, mods = { mob = 0.4, trac = 1.2, damp = -0.1, stab = 0.1, dash = 0.5 } },
     },
 
     -- Assemblages de départ, un par famille (budget respecté)
@@ -57,7 +59,8 @@ SpinArena.Parts = {
         defense   = { label = 'Défense', parts = { core = 'core_heavy', ring = 'ring_guard', frame = 'frame_std', tip = 'tip_ball' } },
         endurance = { label = 'Endurance', parts = { core = 'core_rim', ring = 'ring_std', frame = 'frame_std', tip = 'tip_sharp' } },
         balance   = { label = 'Équilibre', parts = { core = 'core_std', ring = 'ring_round', frame = 'frame_low', tip = 'tip_ball' } },
-        mobility  = { label = 'Mobilité', parts = { core = 'core_light', ring = 'ring_std', frame = 'frame_std', tip = 'tip_rubber' } },
+        -- 30/10 : verrou large (100 points comme l'Attaque, la Défense et l'Endurance, au lieu de 90) : rayon et stabilité en plus
+        mobility  = { label = 'Mobilité', parts = { core = 'core_light', ring = 'ring_std', frame = 'frame_wide', tip = 'tip_rubber' } },
     },
 
     -- Lanceurs (29/10) : même objet `spin_launcher`, le type est dans metadata.launcher. Le serveur applique l'effet au

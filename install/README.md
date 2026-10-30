@@ -9,7 +9,6 @@ et exécuté de toute façon au démarrage par `server/database.lua` si oxmysql 
 |---|---|
 | `ox_inventory_items.lua` | Référence des 4 définitions `spin_*` ; le fichier principal du dépôt contient maintenant ces mêmes objets |
 | `images/` | Icônes à copier dans ox_inventory : les 4 objets + les 18 pièces `spin_part_<id>.png` + leurs sources `.svg` |
-| `icons_money/` | Atelier des icônes de Money (planche source, vignettes, correspondance pièce ↔ vignette) : référence, pas à copier |
 
 ## Installation (ox_inventory)
 1. Ajouter les 4 entrées de `ox_inventory_items.lua` dans `ox_inventory/data/items.lua` uniquement si elles ne s'y trouvent pas déjà.
@@ -22,7 +21,4 @@ Les pièces partagent l'objet `spin_part` ; chaque pièce choisit son icône par
 **28/10/2026 :** `spin_part_ring_reverse.png` (anneau inversé) est nouveau : à copier dans `ox_inventory/web/images/`.
 
 ## Provenance des images
-- `spin_top`, `spin_part`, `spin_repair_kit` : dessinées pour SPIN ARENA (sources `.svg` jointes).
-- `spin_launcher.png` et 14 icônes `spin_part_<id>.png` : planche d'icônes fournie par Money le 19/10/2026
-  (`icons_money/source/`, correspondance dans `icons_money/CORRESPONDANCE.md`). Les trois autres icônes sont originales :
-  `core_light`, `tip_std` et `tip_ball`. `ring_reverse` reprend l'icône de `ring_std`, en miroir et teintée violet.
+Toutes les icones sont originales : `spin_top`, `spin_part`, `spin_repair_kit` sont dessinees pour SPIN ARENA ; les icones des pieces et du lanceur sont rendues depuis les modeles 3D du script.

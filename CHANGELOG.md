@@ -1,5 +1,65 @@
 # CHANGELOG — SPIN ARENA
 
+## 0.6.0 — administration, installation guidée, saisons, chargement par distance — 2026-10-30
+Essayé en jeu : vérification d'installation, panneau (instantané serveur, création et annulation d'un tournoi), chargement par
+distance, places assises sur les gradins du Dôme. Seulement hors jeu : récompenses de saison, affichage du menu `/spin_panel`.
+- **Vérification d'installation** (`server/selfcheck.lua`, les deux éditions) : 6 s après le démarrage, la console liste ce qui manque
+  (ressources, objets ox_inventory, droits ACE). `/spin_check` la relance. Elle ne bloque rien.
+- **Panneau d'administration** (`/spin_panel`, `server/admin_panel.lua` et `client/admin_panel.lua`, les deux éditions) : matchs en
+  cours, tournois, arènes fixes, achats non résolus ; chaque action est vérifiée côté serveur (ACE `spin_arena.admin`).
+- **Récompenses de saison** (`server/season.lua`, Pro) : `/spin_saison cloturer` enregistre une récompense par joueur classé
+  (`ranking.rewards`, désactivé par défaut) ; versée à la connexion ou par `/spin_recompense` ; une saison ne se clôture qu'une fois.
+- **Chargement par distance des tables fixes** (`client/renderer.lua`, `stationStreamRadius`, 250 m par défaut) : le décor d'une table
+  n'est posé que pour les joueurs proches (retiré au delà de 312 m). Vérifié en jeu : aucun objet du Dôme loin de lui.
+- **Places assises et caméra du public pour les gradins d'une extension** (`seating` dans une variante : rangs, arc, positions de caméra)
+  : activées pour la grande arène du Dôme (vérifié en jeu : scénario de banc sur le rang 3).
+- **Correctif** : `/spin_admin arena add|remove` affichait « écriture impossible » et annulait le changement alors que `data/arenas.json`
+  était écrit (`SaveResourceFile` renvoie 1 sur ce serveur, pas `true`).
+- **Livraison** : les zips n'embarquent plus `docs/`, ni les chemins locaux, ni la planche d'icônes de Money ; le pont autonome remplace
+  README par édition ; aucune arène d'exemple livrée. Les arènes de Legion Square ont été retirées du serveur d'essai.
+
+## API d'extension ; le Dôme devient une ressource séparée (spin_arena_dome) — 2026-10-30 (Pro)
+**Hors jeu seulement** (tests : extensions_test 33/33, spin_arena_dome/tests/dome_test.lua 34/34, suite complète verte).
+- **API d'extension** (`server/extensions.lua`, `client/extensions.lua`) : `exports.Chaos_Arena:RegisterExtension({ variants, arenas,
+  shops })` côté serveur. Tout est validé ; une variante livrée ou une arène existante ne peut pas être remplacée ; les arènes d'extension
+  ne sont jamais écrites dans `data/arenas.json` ni supprimables en jeu ; tout est retiré quand l'extension s'arrête ; Chaos_Arena
+  redemande l'enregistrement à son démarrage (`spin_arena:extensions:ready`). Les variantes sont publiées aux clients par GlobalState.
+  Exports : serveur `ApiVersion`, `RegisterExtension`, `UnregisterExtension`, `IsInMatch` ; client `ApiVersion`, `LiveViews`,
+  `FetchTournaments`, `TournamentLines`. Arènes `noBlip` (pas de blip sur la carte). Pro seulement.
+- **Le Dôme sort de Chaos_Arena** : config `venue`, variante `dome_arena`, arènes `dome_*`, `server/venue.lua`, `client/venue.lua`,
+  `client/dome_screens.lua`, `web/dome_tv.html` et les modèles du hall vivent dans `[local]/spin_arena_dome` (extension payante,
+  `tools/package.py` -> `dist/spin_arena_dome-1.0.0.zip`). `spin_arena_extra.ytyp` ne déclare plus que Poche et Colisée. Les outils
+  de génération (`tools/models/build_venue.py`) restent ici.
+- **Échelle et mode puissance des tables** : une variante peut déclarer `scale` (la cuvette simulée R, h est affichée `scale` fois plus
+  grande ; R et h restent les valeurs du moteur) et `power = { v, w }` (les DEUX toupies lancées v fois plus vite et tournant w fois plus
+  fort ; bornes du moteur : v 1 à 1,5, w 1 à 1,3). Grande arène du Dôme : simulée R 1,20 / h 0,225, affichée ×2, SANS puissance
+  (choix d'équilibre du 30/10 : avec la rotation renforcée, l'Attaque gagnait 78 à 88 % de ses matchs contre 60 % sans).
+  Moteur réel, 5 toupies de départ : 1er choc 6,0 s (Colisée 6,6 s, vraie cuvette de 2,40 m 8,3 s), 3,6 chocs par manche (3,2 et 3,0).
+  Tout réglage plus violent (puissance, verrou plus fragile, chocs plus forts) avantage l'Attaque, la famille qui va au contact.
+  Après le rééquilibrage de la Mobilité (config/parts.lua, même jour) : grande arène Attaque 48 %, Défense 41 %, Endurance 70 %,
+  Équilibre 59 %, Mobilité 32 % (Colisée 41/39/70/65/34), 1er choc 5,9 s ; aucune retouche de dome_arena nécessaire.
+- **Téléviseurs** : une page web (DUI) remplace la texture d'écran partagée du hall (`<modèle>_tv`) près du Dôme : combat de la grande
+  arène vu de dessus, sinon tableau du tournoi, sinon attente. Plus de texte flottant.
+
+## Le Dôme : hall de tournoi intérieur, téléviseurs en direct — 2026-10-30 (Pro)
+**Entrée et sortie, décor, collision et tables vérifiés une fois en jeu (visite `spin_tour`) ; le reste hors jeu.**
+- **Hall :** `stream/spin_arena_venue_dome.ydr` (tools/models/build_venue.py) : décor posé par le client loin de la carte (océan, ouest,
+  config `venue.center`), collision embarquée (sol, murs, plafond, meubles). Textures procédurales réalistes (sol en béton poli à
+  joints, murs en panneaux boulonnés, béton brut, acier brossé, fresques à la bombe, embleme de sol) embarquées en DDS avec mipmaps.
+  Aucune marque tierce dans le décor ni les textes.
+- **Entrée / sortie :** marqueur à Legion Square (`venue.entrance`) + E ; demande validée par le serveur (server/venue.lua : position,
+  pas en match, pas en véhicule, délai anti-spam) qui calcule la destination et prévient l'anti-triche (`aeom_anticheat:Grace`).
+- **Arènes du Dôme :** `dome_*` dans `arena.fixedList` ; leurs positions = `venue.center` + `venue.tables` (tests/venue_test.lua).
+- **Néons :** lumières dessinées à chaque image à l'intérieur seulement (`venue.lights`).
+- **Téléviseurs en direct :** `client/dome_screens.lua` lit `Renderer.liveViews()` (dernière keyframe reçue des scènes suivies) et trace sur
+  chaque écran de `venue.screens` la mini-vue de l'arène, les noms, le score et la manche ; mode `tournoi` = tableau du tournoi. Un joueur
+  ne reçoit que les matchs à moins de `arena.watchRadius` (25 m) : voir tests/dome_screens_test.lua.
+- **Correctif collision :** les cartes de collision clonées du gabarit gardaient son décalage `(0, 0, 0.449)` ; remis à zéro dans
+  build_stands, build_tables_extra, build_table_turbo et build_venue. Les gradins de la Colisée n'avaient aucune collision en jeu
+  avant cette correction (cause exacte non confirmée, à revérifier après reconnexion du client : le cache de fichiers streamés).
+- **Piège de démarrage :** un nouveau fichier ajouté au `fxmanifest.lua` n'est lu qu'après `refresh` (txAdmin) ; `ensure` seul ne suffit pas.
+- Pro seulement (`tools/package.py` retire tout cela de l'édition gratuite).
+
 ## Arènes par la config, arène transportable, table de tournoi, cordon — 2026-10-30
 **Rien n'est testé en jeu** ; tests hors jeu verts.
 - **Cordon :** la toupie assemblée attend que ses quatre modèles soient chargés ENSEMBLE avant de se créer (avant, chaque pièce
@@ -21,9 +81,35 @@
 - **Deux éditions (docs/EDITIONS.md) :** `python -I tools/package.py` construit `dist/Chaos_Arena-<version>-free.zip` (GitHub, licence
   AEOM actuelle) et `-pro.zip` (Tebex, `LICENSE_PRO` = brouillon commercial). Marqueurs `-- @pro` dans les configs ; tournois et
   homologation remplacés par `tools/edition/pro_stub.lua` dans l'édition gratuite. Nouveau code de réponse `pro_only`.
+- **Tournois sur la grande table :** les rencontres préfèrent une arène fixe de variante `colisee` près du lieu (config
+  `tournaments.preferVariant`), sinon la plus proche. Une rencontre sur table fixe est homologuée donc classée.
+- **Gradins de la Colisée :** `spin_arena_stands_colisee` (quatre rangs en arc de 250°, garde-corps, écran de tournoi de 3,2 × 1,6 m
+  au fond, deux mâts d'éclairage, collision embarquée), tools/models/build_stands.py. Posés par le client avec la table (mêmes
+  coordonnées et cap, `arenaVariants.colisee.stands`), l'entrée du public est du côté -Y de la table. L'écran est un cadre lumineux :
+  Échelle et collision à vérifier en jeu.
+- **Tableau de tournoi sur l'écran des gradins :** client/tournament_board.lua trace en billboard le titre, les inscriptions (places,
+  compte à rebours, inscrits), le tour en cours avec « EN COURS », la finale et le vainqueur, pour le tournoi dont le lieu est
+  à moins de 60 m de la table. Visible à moins de 26 m, du côté public seulement ; l'état est relu toutes les 5 s via le callback
+  tournoi existant (`venue` ajouté à la vue publique). Pro seulement. Lisibilité du texte à vérifier en jeu.
+- **Colisée de Legion Square (config, Pro) :** `arena.fixedList` pose `colisee_legion` à (195, -934, 30,2) cap 0 : position ESTIMÉE,
+  jamais vue en jeu (parc au sud des tables) ; à corriger dans config/server.lua si elle est dans un arbre, un mur ou sous le sol.
+  Vérification de place : la pose d'une table à gradins tient compte de l'emprise des gradins (5,1 m).
+- **Places assises :** client/stands_seats.lua, 25 places par rang (100 au total), aide à l'écran et touche E (scénario de banc GTA),
+  E ou X pour se relever. Local seulement : deux joueurs peuvent prendre la même place. Pro.
+- **Caméra du public :** client/stands_camera.lua ; sur les rangs (debout ou assis), G passe de la vue « Cuvette » (oblique, côté
+  entrée, 0,75 m au-dessus du fond) à la vue « Dessus » (2,3 m), puis revient à la vue normale. Coupée en quittant les gradins, à la
+  mort et à l'arrêt de la ressource. Locale, sans effet sur le match. Cadrage à régler en jeu. Pro.
+- **Blip de la Colisée :** icône plus grosse, jaune, visible de loin, « Colisée SPIN ARENA » (config `arenaVariants.colisee.blip`).
+- **Gains de tournoi :** vainqueur et finaliste payés par le serveur (`tournaments.rewards`, par taille de tableau), DÉSACTIVÉS par
+  défaut (argent créé : à régler selon ton économie). Annonce « le tournoi commence » à toute la ville.
+- **Un modèle 3D par lanceur :** `spin_launcher_crank` (grande manivelle), `_spring` (ressort apparent), `_precision` (canon
+  et guide de visée), `_rail` (patins dentés), tools/models/build_launchers.py. Même géométrie d'accroche que le Cordon (main,
+  griffes, cordon : la calibration ne bouge pas). Le type du lanceur de chaque joueur est dans l'en-tête de match
+  (`tops[i].launcher`) : chacun voit le bon modèle en main, y compris chez les autres joueurs ; modèle de base si le modèle du
+  type manque (`Launcher.modelFor`). Édition Pro seulement. Couleurs et orientation à vérifier en jeu.
 - Après mise à jour : `/spin_admin arena remove` des arènes de test si les modèles changent, puis `ensure Chaos_Arena`.
 
-## Pièces à trois étages, finitions Éclat et Turbo, thème d'arène — 2026-10-29 (demande de Maxim)
+## Pièces à trois étages, finitions Éclat et Turbo, thème d'arène — 2026-10-29
 
 Règle du projet (docs/ASSET_REGISTER.md) : aucun nom, logo, silhouette ni pièce d'une marque existante. Tout ce qui suit
 est à nous : le vocabulaire des finitions, les pièces et l'interface s'inspirent seulement des principes du genre.
@@ -70,7 +156,7 @@ est à nous : le vocabulaire des finitions, les pièces et l'interface s'inspire
 - Nouveau : tests/finishes_test.lua (24 vérifications : pièces, éclatement, rail, points) et tests/launchers_test.lua (28 : catalogue, effets, boutique, inventaire, jauge d'un match). tests/emulator.lua, scénario 7 : bruit réseau propre au scénario et éclatements coupés (l'écart d'affichage dépendait de la durée des manches des scénarios précédents).
 - Non fait : nouveaux modèles 3D (stade à rail visible, grande arène de tournoi, arène portable, lanceurs), choix des positions d'arènes par configuration.
 
-## Spectacle du combat et rotation gauche — 2026-10-28 (demande de Maxim, d'après ses images de toupies de combat)
+## Spectacle du combat et rotation gauche — 2026-10-28
 
 **Rien n'est testé en jeu.** Vérifié hors jeu seulement : natives simulées et émulateur (voir « Tests »).
 
@@ -111,10 +197,9 @@ est à nous : le vocabulaire des finitions, les pièces et l'interface s'inspire
 - Nouveau `tests/spectacle_test.lua` (38/38, natives simulées, vrais fichiers client) : rotation gauche et silhouettes, poches, traînées, inclinaison, combat complet (lanceurs des deux duellistes chez un spectateur, envol et rangement, étincelles sans wobble, éclair, poche qui clignote, toupie éjectée au sol hors de la table et couchée, ralenti 0,4×, maintien prolongé puis nettoyage), toupie arrêtée qui bascule, réglage coupé, participant (seul le lanceur adverse ajouté, sens de rotation connu, emballement quand l'adversaire a lancé).
 - `combat_audio_test.js` étendu (une seule voix de sifflement, bornée, coupée par le niveau 0 et par l'arrêt) ; `launcher_props_test` (51/51) attend le nouveau geste ; `icons_mapping_test` couvre l'icône ajoutée.
 - Toutes les autres suites Lua et JS : mêmes résultats qu'avant ces changements.
-- **Suites émulées réparées (28/10).** Depuis la centralisation du pont (27/10), `bridge/server.lua` appelle `exports['aeom-bridge']`, absent des émulateurs : toutes les suites émulées échouaient au chargement. Nouveau `tests/helpers/with_bridge.lua`, appelé par chaque test émulé : il charge `[creations]/aeom-bridge` (serveur seul) avant Chaos_Arena et simule `SetBlockingOfNonTemporaryEvents`. `part_icons_test` retire la Pointe bille de `partIcons` le temps de l'achat (elle a une icône depuis le 21/10). Les 62 suites Lua de `tests/` et `tests/fivem_emu/` passent sous Windows (`FIVEM_EMU=D:/FXServer/tools/fivem-emulator`) ; `cfx_integration.lua` reste le harnais CfxLua, à lancer sur un vrai serveur.
 - **Accueil et vendeur sans script de ciblage** (`client/concierge.lua`, `client/shop_vendor.lua`) : si `TargetCompat` vaut nil (ni ox_target ni qb-target), le PNJ est posé sans option au lieu de lever une erreur. Avec ox_target, rien ne change.
 
-## Lanceur à tirette et combats moins réglés — 2026-10-28 (demande de Maxim)
+## Lanceur à tirette et combats moins réglés — 2026-10-28
 
 - **Lancer en trois gestes.** ← / → incline le lanceur (bord · droit · centre), ESPACE **tenu** saisit la tirette au bon moment sur la jauge (la prise), ESPACE **relâché** tire : le serveur mesure la durée entre les deux messages, idéale de 150 à 450 ms (`pullMinMs`, `pullMaxMs`, `pullFadeMs`). Qualité = 55 % prise + 45 % tirage (`gripWeight`). La commande `spin_launch` reste un appui rapide : tirage nul, qualité plafonnée à `gripWeight` (« bon » au mieux).
 - **Serveur seul juge.** Nouveau callback `spin_arena:launch_grip` (schéma strict, limite de fréquence, nonce à usage unique) ; `launch_release` accepte `tilt` (−1, 0, 1, entier). Rien de numérique n'est renvoyé : seulement des libellés (`grade`, `grip`, `pull`). Le client n'envoie ni force ni durée.

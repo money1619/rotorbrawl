@@ -45,7 +45,15 @@ end
 
 -- Rayon hors tout d'une table (modèle complet) pour les écarts entre tables : rOuter de la variante, sinon R + 0,10
 local SKIRT = 0.10
-local function outer(v) return tonumber(v.rOuter) or (v.R + SKIRT) end
+local function outer(v)
+    local o = tonumber(v.rOuter) or (v.R + SKIRT)
+    -- Variante à gradins (Colisée) : l'emprise est celle des gradins (dernier rang + 0,5 m de garde-corps et de mât)
+    local st = v.stands
+    if type(st) == 'table' and tonumber(st.rIn) and tonumber(st.rings) and tonumber(st.ringW) then
+        o = math.max(o, st.rIn + st.rings * st.ringW + 0.5)
+    end
+    return o
+end
 
 -- Géométrie simulée d'une table autour d'un centre posé au sol (standard par défaut)
 local function shape(center, variant)
@@ -54,10 +62,14 @@ local function shape(center, variant)
     return {
         x = center.x, y = center.y, z = center.z,
         heading = center.heading,
-        scale = 1.0,
+        -- échelle d'affichage : le moteur simule R et h, le client montre la cuvette `scale` fois plus grande (grande arène
+        -- du Dôme : combat de table de tournoi, affiché deux fois plus grand, donc des toupies deux fois plus vives à l'œil)
+        scale = tonumber(base.scale) or 1.0,
         variant = name, model = base.model, floorHeight = base.floorHeight,
         R = base.R, h = base.h, pockets = base.pockets,
         railBoost = base.railBoost,   -- rail turbo de la variante (nil = aucun)
+        power = base.power,           -- mode puissance de la variante (nil = aucun)
+        watchRadius = base.watchRadius, -- rayon du public de la variante (nil = arena.watchRadius de la config)
     }
 end
 
@@ -143,6 +155,7 @@ function Arenas.stations(bucket)
                 variant = e.variant or 'standard',
                 model   = (variantOf(e.variant) or variantOf('standard')).model,
                 busy    = overlaps(fromFixed(e), e.bucket),
+                noBlip  = e.noBlip or nil,   -- arène d'extension sans blip (ex. tables du Dôme, loin de la carte)
             }
         end
     end
@@ -179,13 +192,16 @@ function Arenas.place(ctx, stationName)
         return arena
     end
 
-    local best, bestD
+    -- ctx.preferVariant (tournois : grande table du lieu) passe avant la distance, sans exclure les autres tables
+    local best, bestD, bestPref
     for _, entry in pairs(Arenas.fixed) do
         if entry.bucket == ctx.bucket then
             local d = Arenas.distance(entry, ctx.coords)
-            if d <= c.fixedRadius and (not bestD or d < bestD) then
+            -- table de tournoi : la variante demandée, ou une variante marquée `tournament` (grande arène d'une extension)
+            local pref = ctx.preferVariant ~= nil and (entry.variant == ctx.preferVariant or (variantOf(entry.variant) or {}).tournament == true)
+            if d <= c.fixedRadius and (not bestD or (pref and not bestPref) or (pref == bestPref and d < bestD)) then
                 local arena = fromFixed(entry)
-                if not overlaps(arena, ctx.bucket) then best, bestD = arena, d end
+                if not overlaps(arena, ctx.bucket) then best, bestD, bestPref = arena, d, pref end
             end
         end
     end
@@ -207,13 +223,15 @@ function Arenas.audience(arena, bucket, participants)
         seen[src] = true
     end
     local candidates = {}
+    -- rayon du public : celui de la variante (grande arène d'un hall, écrans en direct jusque dans les coins), sinon la config
+    local watch = tonumber(arena.watchRadius) or cfg().watchRadius
     for _, id in ipairs(GetPlayers()) do
         local src = tonumber(id)
         if src and not seen[src] and GetPlayerRoutingBucket(src) == bucket then
             local ped = GetPlayerPed(src)
             if ped and ped ~= 0 then
                 local d = Arenas.distance(arena, GetEntityCoords(ped))
-                if d <= cfg().watchRadius then candidates[#candidates + 1] = { src = src, d = d } end
+                if d <= watch then candidates[#candidates + 1] = { src = src, d = d } end
             end
         end
     end
@@ -260,6 +278,18 @@ function Arenas.load()
             log('arène de la config invalide ou en double ignorée : %s', tostring(type(e) == 'table' and e.name or e))
         end
     end
+    -- Arènes des extensions (server/extensions.lua) : après la config, jamais réécrites dans le fichier ni supprimables en jeu
+    local Ext = SpinArena.Extensions
+    for _, item in ipairs(Ext and Ext.fixedArenas and Ext.fixedArenas() or {}) do
+        local e = item.entry
+        if validFixed(e) and not Arenas.fixed[e.name] then
+            Arenas.fixed[e.name] = { name = e.name, x = e.x, y = e.y, z = e.z, heading = e.heading, bucket = math.tointeger(e.bucket),
+                                     variant = e.variant, label = e.label, noBlip = e.noBlip, fromConfig = true, extension = item.owner }
+            nf = nf + 1
+        else
+            log('arène de l\'extension %s invalide ou en double ignorée : %s', tostring(item.owner), tostring(e.name))
+        end
+    end
     for _, e in ipairs(type(data.arenas) == 'table' and data.arenas or {}) do
         if validFixed(e) and not Arenas.fixed[e.name] then
             Arenas.fixed[e.name] = { name = e.name, x = e.x, y = e.y, z = e.z, heading = e.heading, bucket = math.tointeger(e.bucket),
@@ -288,7 +318,9 @@ function Arenas.save()
     local data = { version = 1, arenas = own, zones = sorted(Arenas.zones) }
     local ok, encoded = pcall(json.encode, data)
     if not ok then return false end
-    return SaveResourceFile(GetCurrentResourceName(), cfg().dataFile, encoded, -1) == true
+    local saved = SaveResourceFile(GetCurrentResourceName(), cfg().dataFile, encoded, -1)
+    -- Selon la version du serveur, SaveResourceFile renvoie true ou 1 (le fichier est bien écrit) : tout sauf false/nil/0 est un succès
+    return saved == true or (type(saved) == 'number' and saved ~= 0)
 end
 
 -------------------------------------------------------------------------------
@@ -357,6 +389,7 @@ function Arenas.admin(src, args, reply)
 
     if sub == 'remove' then
         if not map[name] then return reply(name .. ' introuvable') end
+        if map[name].extension then return reply(name .. ' vient de l\'extension ' .. tostring(map[name].extension) .. ' : à retirer dans sa configuration') end
         if map[name].fromConfig then return reply(name .. ' vient de config/server.lua (arena.fixedList) : à retirer dans ce fichier') end
         if commit(map, name, nil, reply) then
             log('%s %s supprimée par %s', kind, name, who)

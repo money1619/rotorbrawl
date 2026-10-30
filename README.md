@@ -5,7 +5,7 @@ Univers et noms originaux (aucune marque, aucun jouet existant). La ressource s'
 de travail.
 
 > **Édition gratuite.** Une édition **Pro** existe (tournois, matchs homologués avec certificat signé, tables Turbo / Poche /
-> Colisée, arène transportable, quatre lanceurs de plus, trois pièces de plus). Voir `docs/EDITIONS.md`.
+> Colisée, arène transportable, quatre lanceurs de plus, trois pièces de plus).
 
 ## Ce qui est inclus
 - Parcours **acheter → assembler → défier → combattre → réparer**.
@@ -19,8 +19,8 @@ de travail.
 - Compatible ESX / QBCore / Qbox, ox / qs / qb (voir `bridge/`).
 
 ## Installation
-1. Dépendances : `oxmysql`, `ox_lib`, un framework (ESX, QBCore ou Qbox), `ox_inventory`, `ox_target`, et la ressource
-   `aeom-bridge` (pont commun des ressources AEOM) démarrée avant celle-ci.
+1. Dépendances : `oxmysql`, `ox_lib`, un framework (ESX, QBCore ou Qbox), `ox_inventory`, `ox_target`. Le pont
+   framework / inventaire est livré dans `bridge/` (fichiers ouverts, aucune autre ressource à installer).
 2. Copier le dossier `Chaos_Arena` dans les ressources.
 3. Ajouter les objets de `install/ox_inventory_items.lua` à ox_inventory et copier les images de `install/` dans
    `ox_inventory/web/images/`.
@@ -31,7 +31,6 @@ de travail.
    ensure es_extended      # ou qb-core / qbx_core
    ensure ox_target
    ensure ox_inventory
-   ensure aeom-bridge
    ensure Chaos_Arena
    add_ace group.admin command.spin_admin allow
    add_ace group.admin spin_arena.admin allow
@@ -40,8 +39,7 @@ de travail.
 
 ## État honnête
 Les modèles, la physique, l'interface et les animations ont été vérifiés hors jeu (moteur réel, émulateur, tests Lua/JS) et en
-partie en jeu. Les points à contrôler sur ton serveur : échelle et orientation des modèles, animations du lanceur, positions des
-tables d'exemple (Legion Square). Voir `docs/RECETTE_PARCOURS_JOUEUR.md`.
+partie en jeu. Les points à contrôler sur ton serveur : échelle et orientation des modèles, animations du lanceur, positions de tes tables.
 
 ## Licence
 `LICENSE` : modification autorisée, revente interdite, crédit obligatoire à AEOM Development. Les éléments de tiers (ESX, ox_*,

@@ -176,5 +176,7 @@ end)
 
 local fixedCount, zoneCount = SpinArena.Arenas.load()
 log('arènes fixes : %d, zones autorisées : %d', fixedCount, zoneCount)
+-- Extensions déjà démarrées (Chaos_Arena relancé) : elles se réenregistrent sur cet événement (server/extensions.lua)
+if SpinArena.Extensions then SpinArena.Extensions.announceReady() end
 
 log('chargé : défis, matchs, arènes, classement, toupies et atelier')

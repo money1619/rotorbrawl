@@ -126,6 +126,9 @@ local FALLBACK_FR = {
     tournament_match_ready    = 'Tournoi « {tournament} » : votre match contre {opponent} est prêt ({seconds} s) !',
     tournament_eliminated     = 'Vous avez été éliminé du tournoi « {tournament} » au tour {round}.',
     tournament_won            = '{name} remporte le tournoi « {tournament} » !',
+    tournament_live           = 'Le tournoi « {tournament} » commence ({players} participants) : rendez-vous aux gradins !',
+    tournament_reward_winner  = 'Victoire au tournoi « {tournament} » : {amount} $ versés.',
+    tournament_reward_finalist = 'Finale du tournoi « {tournament} » : {amount} $ versés.',
     tournament_no_winner      = 'Le tournoi « {tournament} » s\'est terminé sans vainqueur.',
     tournament_cancelled      = 'Le tournoi « {tournament} » a été annulé ({reason}).',
     tournament_invalid_top    = 'Tournoi « {tournament} » : votre toupie inscrite est indisponible ({code}).',
@@ -817,7 +820,7 @@ function Client.createArenaZone(arena)
         return nil
     end
 
-    local radius = (tonumber(arena.R) or 0.6) + 0.5
+    local radius = (tonumber(arena.R) or 0.6) * (tonumber(arena.scale) or 1.0) + 0.5
     local coords = makeVec3(tonumber(arena.x), tonumber(arena.y), tonumber(arena.z))
     local addedOk, zoneId = pcall(function()
         return targetExport:addSphereZone({
@@ -1630,17 +1633,22 @@ function Client.syncStationTargets(stations)
                 if type(o) == 'table' and tonumber(o.x) and tonumber(o.y)
                     and (tonumber(o.x) - sx) ^ 2 + (tonumber(o.y) - sy) ^ 2 < 15.0 * 15.0 then grouped = true break end
             end
-            if not grouped and type(AddBlipForCoord) == 'function' then
+            -- Arène d'extension sans blip (ex. tables du Dôme, loin de la carte : le blip de sa porte suffit)
+            if not grouped and not st.noBlip and type(AddBlipForCoord) == 'function' then
                 local blip = AddBlipForCoord(sx, sy, sz + 0.5)
                 if blip and blip ~= 0 then
                     Client.stationBlips[#Client.stationBlips + 1] = blip
-                    if type(SetBlipSprite) == 'function' then SetBlipSprite(blip, 310) end
+                    -- Variante à blip propre (Colisée : config arenaVariants.<v>.blip) ; sinon blip de station
+                    local variants = SpinArena.Config and SpinArena.Config.arenaVariants or {}
+                    local own = variants[st.variant or 'standard'] and variants[st.variant or 'standard'].blip or {}
+                    if type(SetBlipSprite) == 'function' then SetBlipSprite(blip, own.sprite or 310) end
                     if type(SetBlipDisplay) == 'function' then SetBlipDisplay(blip, 4) end
-                    if type(SetBlipScale) == 'function' then SetBlipScale(blip, 0.75) end
-                    if type(SetBlipColour) == 'function' then SetBlipColour(blip, st.busy and 1 or 47) end
-                    if type(SetBlipAsShortRange) == 'function' then SetBlipAsShortRange(blip, true) end
-                    if type(AddTextEntry) == 'function' then AddTextEntry('SPIN_ARENA_STATION', 'Station SPIN ARENA') end
-                    if type(BeginTextCommandSetBlipName) == 'function' then BeginTextCommandSetBlipName('SPIN_ARENA_STATION') end
+                    if type(SetBlipScale) == 'function' then SetBlipScale(blip, own.scale or 0.75) end
+                    if type(SetBlipColour) == 'function' then SetBlipColour(blip, st.busy and 1 or (own.colour or 47)) end
+                    if type(SetBlipAsShortRange) == 'function' then SetBlipAsShortRange(blip, own.shortRange ~= false) end
+                    local blipText = own.label and 'SPIN_ARENA_STATION_' .. tostring(st.variant) or 'SPIN_ARENA_STATION'
+                    if type(AddTextEntry) == 'function' then AddTextEntry(blipText, own.label or 'Station SPIN ARENA') end
+                    if type(BeginTextCommandSetBlipName) == 'function' then BeginTextCommandSetBlipName(blipText) end
                     if type(EndTextCommandSetBlipName) == 'function' then EndTextCommandSetBlipName(blip) end
                 end
             end
