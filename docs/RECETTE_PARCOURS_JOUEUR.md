@@ -1,0 +1,27 @@
+# Recette joueur Arena : acheter, assembler, défier, combattre
+
+Procédure à exécuter après livraison du client. **Aucun résultat en jeu annoncé par ce document.** Instance dédiée avec ESX, ox_inventory, oxmysql et deux vrais clients GTA ; `allowTestProfiles = false`. Relever les versions et le commit déployé. Ne pas utiliser les profils debug pour valider la possession.
+
+Pour chaque scénario conserver : heure, identités anonymisées A/B, UID de test, argent et objets avant/après, résultat attendu/observé, erreurs F8/serveur et capture si nécessaire. Les comptes et objets doivent être dédiés aux essais.
+
+| Étape | Action | Résultat attendu |
+|---|---|---|
+| Sans matériel | A sans toupie cible B pour défier | Aucun profil gratuit proposé ; indication toupie complète nécessaire. Une requête directe est également refusée côté serveur. |
+| PNJ Accueil (`215.76, -810.12, 30.73`) | Viser le PNJ **Accueil SPIN ARENA** avec `ox_target` (`Alt`) ; vérifier que `F7` n'ouvre rien | Fenêtre NUI compacte (`680 × 450` max, déplaçable/redimensionnable avec géométrie persistée) affichant Accueil, Mes toupies / Atelier, Défis, Classement et Tournois ; **aucun raccourci F7** et **aucun bouton ni onglet Boutique dans la NUI** (`nui:openShop` refusé côté client avec `vendor_only`). |
+| PNJ Vendeur (`225.5, -798.2, 30.7`, 4 catégories) | Viser le second PNJ vendeur sur la carte (blip `Boutique SPIN ARENA`) avec `ox_target` (`Alt`) | Les **4 options de catégories** apparaissent sur le PNJ : `Boutique : Toupies` (`spinarena_tops`, 5 familles), `Boutique : Lanceurs` (`spinarena_launchers`, lanceur), `Boutique : Pièces détachées` (`spinarena_parts`, 17 pièces) et `Boutique : Réparation` (`spinarena_repair`, kit de réparation). Chaque option ferme la NUI si elle était ouverte et ouvre uniquement le catalogue serveur correspondant avec `targets` et contrôle de distance 3 m. |
+| Achat par catégorie | Acheter 2 toupies dans `Boutique : Toupies`, 1 lanceur dans `Boutique : Lanceurs`, 1 pièce dans `Boutique : Pièces détachées`, 1 kit dans `Boutique : Réparation` | Débit exact aux prix serveur ; toupies reçues avec UID distincts (`ST...`) ; lanceur, pièce et kit présents dans l'inventaire. |
+| Refus | Acheter sans argent, avec inventaire plein, ou à plus de 3 m du vendeur | Aucun débit ni objet supplémentaire ; refus par `ox_inventory` / hooks `openShop` et `buyItem` (`Shop.canAccess`). |
+| Pièces | Ouvrir l'atelier (PNJ Accueil ou station fixe → `Mes toupies / Atelier`) après achat d'une pièce | Pièce possédée visible dans son emplacement (`core`, `ring`, `frame`, `tip`) avec effets de combat et coût dynamique ; prix et statistiques ne viennent pas du client. |
+| Assemblage | Changer une pièce compatible dans l'atelier | Nouvelle pièce consommée, ancienne rendue, assemblage et caractéristiques persistés ; pas de double consommation en cliquant deux fois. |
+| Assemblage invalide | Utiliser un jeu de données de test incomplet, incompatible ou hors budget | Refus de défi et de participation ; aucune statistique fictive de remplacement. Ne pas altérer les données de joueurs réels. |
+| Station fixe (`legion_square`, `220.5, -804.2, 29.75`) | Cibler la station fixe (blip `Station SPIN ARENA`) avec `ox_target` → `Défier sur cette station`, choisir un adversaire proche et sa toupie ; tenter un second match simultané sur la même station | Le premier duel réserve exclusivement la station (`fixedId = 'legion_square'`) sans créer d'objet réseau permanent ; tout second défi sur cette même station pendant le match est refusé (`no_arena`), puis la station redevient disponible dès la fin ou l'abandon du match. |
+| Duel | A et B sélectionnent leurs UID complets puis acceptent | Même match et compte à rebours, sons procéduraux bornés, résultat serveur, énergie et mouvement cohérents pour les deux joueurs. |
+| Verrou | Tenter atelier, transfert ou ouverture des 4 catégories vendeur pendant le match | Refus (`canInteract = false` sur les 4 options vendeur pour un participant, fermeture automatique de la NUI, verrous serveur actifs) ; pièces et UID restent cohérents. |
+| Premier chargement | Rejoindre avec les modèles et animations non encore chargés | Préparation et lanceur apparaissent après chargement borné ; aucune création tardive après annulation ou fin. |
+| Abandon | Utiliser l'option d'abandon dans l'arène | Résultat cohérent des deux côtés, suppression des objets et des zones temporaires, verrous libérés. |
+| Persistance | Se reconnecter après un assemblage réussi | Même UID, propriétaire, assemblage et solde. |
+| Arrêt magasin | Désactiver la boutique ou supprimer son dernier point sur l'instance de test | Aucune des 4 catégories ni la boutique globale ne peut s'ouvrir ou vendre ; aucun débit. |
+
+Pour les essais de perte de connexion SQL, utiliser une injection contrôlée sur l'instance dédiée : vérifier que `Boutique : Toupies` (`spinarena_tops`) est refusée à l'ouverture et à l'achat tant que `SpinArena.Tops.enabled()` est faux. Les opérations `review/owed` doivent être identifiées et récupérées selon une procédure documentée ; ne pas annoncer une récupération automatique si elle n'est pas implémentée et testée.
+
+La recette est réussie uniquement lorsque les observations des clients GTA et les états serveur/inventaire concordent. Les tests Lua, JS et les mocks restent des preuves hors jeu séparées. Le classement et les tournois disposent de leur propre procédure dans `ESSAI_ARENES_CLASSEMENT_TOURNOIS.md`.

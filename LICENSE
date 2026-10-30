@@ -1,0 +1,89 @@
+LICENCE AEOM Development - Modification autorisée, revente interdite
+Copyright © 2026 AEOM Development. Tous droits réservés, sauf ceux accordés ci-dessous.
+
+Créateur original : AEOM Development
+
+1. Propriété
+   Cette ressource FiveM (code Lua, JavaScript, HTML et CSS, interfaces NUI,
+   fichiers de configuration, images, sons, modèles créés par AEOM Development
+   et documentation) reste la propriété d'AEOM Development, même une fois
+   modifiée.
+
+2. Ce qui est permis
+   Toute personne qui a obtenu la ressource légalement peut :
+   a) l'installer et l'utiliser sur ses serveurs FiveM ;
+   b) la modifier, l'adapter, la traduire ou la corriger librement, en totalité
+      ou en partie, et reprendre des parties du code dans ses propres scripts ;
+   c) partager gratuitement une version modifiée, à condition de respecter
+      l'article 3.
+
+3. Crédit obligatoire
+   Toute version modifiée, et tout script qui reprend une partie du code, doit :
+   a) indiquer clairement qu'AEOM Development est le créateur original, par
+      exemple : « Basé sur <nom de la ressource> par AEOM Development » dans
+      le README, la description et le fxmanifest (author ou description) ;
+   b) garder ce fichier LICENSE et les mentions de copyright d'origine ;
+   c) rester sous cette même licence (pas de changement de licence).
+   Il est interdit de présenter la ressource, modifiée ou non, comme sa propre
+   création.
+
+4. Ce qui est interdit
+   Sauf accord écrit d'AEOM Development, il est interdit de :
+   a) vendre, revendre, louer ou sous-licencier la ressource ou une version
+      modifiée, en totalité ou en partie, que ce soit sur Tebex, Patreon, Ko-fi,
+      Discord, un site web ou toute autre plateforme ;
+   b) l'inclure dans un pack, un abonnement, un serveur « clé en main » ou tout
+      autre produit payant, ou en réserver l'accès contre paiement, don
+      obligatoire ou avantage ;
+   c) retirer ou modifier cette licence, les mentions de copyright ou le nom
+      du créateur original ;
+   d) contourner une protection de la ressource (par exemple l'escrow FiveM /
+      Tebex) ou en extraire le code protégé.
+
+5. Éléments de tiers
+   Les éléments qui appartiennent à d'autres auteurs restent leur propriété et
+   gardent leur propre licence. C'est le cas notamment des bibliothèques (ESX,
+   ox_lib, oxmysql, ox_inventory, ox_target...), des polices, des modèles et
+   textures signalés comme provenant de tiers, ainsi que des modèles, textures
+   et données de Grand Theft Auto V (Rockstar Games / Take-Two Interactive).
+   La présente licence ne couvre que le travail d'AEOM Development.
+
+6. Absence de garantie
+   La ressource est fournie « telle quelle », sans aucune garantie. AEOM
+   Development n'est pas responsable des dommages, pertes de données ou
+   interruptions de service liés à son utilisation, modifiée ou non.
+
+7. Fin de la licence
+   Tout manquement à cette licence met fin automatiquement au droit
+   d'utilisation, de modification et de partage. La ressource et ses versions
+   modifiées doivent alors être supprimées de tous les serveurs et supports,
+   et retirées de toute vente.
+
+Pour toute demande d'autorisation : AEOM Development.
+
+-------------------------------------------------------------------------------
+
+AEOM Development LICENSE - Modification allowed, resale prohibited
+Copyright © 2026 AEOM Development. All rights reserved except as granted below.
+
+Original creator: AEOM Development
+
+Anyone who lawfully obtained this FiveM resource may use it on their servers,
+modify it freely, reuse parts of its code, and share modified versions free of
+charge, provided that: (1) AEOM Development is clearly credited as the original
+creator (e.g. "Based on <resource name> by AEOM Development" in the README,
+description and fxmanifest); (2) this LICENSE file and the original copyright
+notices are kept; (3) the modified version stays under this same license.
+Claiming the resource as your own work is prohibited.
+
+Without written permission from AEOM Development, you may not sell, resell,
+rent or sublicense this resource or any modified version, in whole or in part,
+on Tebex, Patreon, Ko-fi, Discord, a website or any other platform; bundle it
+in any paid product, pack, subscription or ready-made server; put access to it
+behind a payment or required donation; remove this notice or the original
+creator's name; or bypass any protection (FiveM / Tebex escrow).
+
+Third-party components (frameworks, libraries, fonts, assets and Grand Theft
+Auto V content) remain the property of their respective owners and keep their
+own licenses. Provided "as is", without warranty. Any breach ends all rights
+granted by this license. In case of doubt, the French version above prevails.

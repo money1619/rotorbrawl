@@ -1,0 +1,6 @@
+*.tmp
+.DS_Store
+Thumbs.db
+data/*
+!data/.gitkeep
+!data/arenas.json

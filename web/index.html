@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SPIN ARENA</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div id="arena-app" class="arena-overlay hidden" role="dialog" aria-modal="true" aria-label="Spin Arena">
+        <div id="arena-window" class="arena-shell">
+            <header class="arena-header">
+                <div class="arena-brand" id="window-drag-handle" tabindex="0" title="Glisser pour déplacer ; flèches au clavier, Maj + flèches pour redimensionner" aria-label="Déplacer la fenêtre Arena">
+                    <div class="brand-emblem" aria-hidden="true">
+                        <span class="ring-outer"></span>
+                        <span class="ring-inner"></span>
+                    </div>
+                    <div>
+                        <div class="brand-title">SPIN ARENA</div>
+                        <div class="brand-subtitle">Atelier mécanique • Duels autoritaires • Classement</div>
+                    </div>
+                </div>
+
+                <nav class="arena-nav" aria-label="Navigation principale">
+                    <button type="button" class="nav-btn active" data-tab="home">Accueil</button>
+                    <button type="button" class="nav-btn" data-tab="challenges">
+                        Défis <span id="nav-challenges-badge" class="nav-badge hidden">0</span>
+                    </button>
+                    <button type="button" class="nav-btn" data-tab="leaderboard">Classement</button>
+                    <button type="button" class="nav-btn" data-tab="tournaments">Tournois</button>
+                    <button type="button" class="nav-btn nav-shop hidden" data-tab="shop" id="nav-shop">Boutique</button>
+                </nav>
+
+                <div class="arena-header-actions">
+                    <button type="button" class="icon-btn" id="window-reset" title="Recentrer et rétablir la taille" aria-label="Réinitialiser la fenêtre">⌖</button>
+                    <button type="button" class="icon-btn" id="btn-refresh" title="Actualiser">↻</button>
+                    <button type="button" class="close-btn" id="btn-close" title="Fermer (Échap)">✕ Fermer</button>
+                </div>
+            </header>
+
+            <div id="status-banner" class="status-banner hidden"></div>
+
+            <main class="arena-main">
+                <!-- Vue Accueil -->
+                <section id="view-home" class="arena-view"></section>
+
+
+                <!-- Vue Défis -->
+                <section id="view-challenges" class="arena-view hidden"></section>
+
+                <!-- Vue Classement -->
+                <section id="view-leaderboard" class="arena-view hidden"></section>
+
+                <!-- Vue Tournois -->
+                <section id="view-tournaments" class="arena-view hidden"></section>
+
+                <!-- Vue Boutique (ouverte depuis un vendeur) : catégories internes, achat validé par le serveur -->
+                <section id="view-shop" class="arena-view hidden"></section>
+            </main>
+
+            <button type="button" id="window-resize-handle" aria-label="Redimensionner la fenêtre Arena" title="Glisser pour redimensionner ; flèches au clavier">◢</button>
+            <footer class="arena-footer">
+                <span>Accès : <strong>PNJ Arena</strong> • Fermer : <strong>Échap</strong></span>
+                <span id="footer-equipped">Toupie équipée : Aucune</span>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Résumé de fin de match (web/match_summary.js) : encart bref, sans focus, chez les duellistes seulement -->
+    <div id="match-summary" class="match-summary hidden" role="status" aria-live="polite"></div>
+    <!-- Lancement manuel : jauge de visée (web/launch_gauge.js) ; hors de la fenêtre Arena, sans focus forcé pour les spectateurs -->
+    <div id="launch-ui" class="launch-ui hidden" role="dialog" aria-label="Lancement de la toupie">
+        <div class="launch-title">LANCEMENT</div>
+        <div id="launch-label" class="launch-label"></div>
+        <!-- Lanceur à tirette : s'incline avec le choix (← bord · droit · centre →), la tirette s'étire pendant la prise et part au tirage -->
+        <svg class="launch-rig" viewBox="0 0 470 178" aria-hidden="true">
+            <defs>
+                <linearGradient id="rig-tube" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b4252"/><stop offset="0.26" stop-color="#c8cfdb"/><stop offset="0.55" stop-color="#7b8494"/><stop offset="1" stop-color="#22272f"/></linearGradient>
+                <linearGradient id="rig-grip" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#12151b"/><stop offset="0.5" stop-color="#303743"/><stop offset="1" stop-color="#12151b"/></linearGradient>
+                <linearGradient id="rig-steel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6eaf1"/><stop offset="1" stop-color="#6c7484"/></linearGradient>
+                <linearGradient id="rig-orange" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffa64d"/><stop offset="1" stop-color="#d4540a"/></linearGradient>
+                <radialGradient id="rig-glow" cx="0.5" cy="0" r="1"><stop offset="0" stop-color="#19e6ff" stop-opacity="0.9"/><stop offset="1" stop-color="#19e6ff" stop-opacity="0"/></radialGradient>
+            </defs>
+            <ellipse class="rig-shadow" cx="300" cy="174" rx="130" ry="3.5"/>
+            <g class="rig-launcher">
+                <path class="rig-grip" d="M240 94 L286 94 L274 164 L228 164 Z"/>
+                <rect class="rig-rubber" x="237" y="112" width="46" height="6" rx="3"/>
+                <rect class="rig-rubber" x="234" y="128" width="46" height="6" rx="3"/>
+                <rect class="rig-rubber" x="231" y="144" width="46" height="6" rx="3"/>
+                <rect class="rig-heel" x="226" y="162" width="50" height="8" rx="2"/>
+                <path class="rig-guard" d="M286 96 L286 126 Q286 134 296 134 L308 134"/>
+                <path class="rig-trigger" d="M290 96 L300 96 L303 122 L294 122 Z"/>
+                <rect class="rig-tube" x="200" y="40" width="190" height="56" rx="16"/>
+                <rect class="rig-cap" x="198" y="46" width="14" height="44" rx="6"/>
+                <rect class="rig-cap" x="378" y="44" width="14" height="48" rx="7"/>
+                <rect class="rig-ring" x="352" y="40" width="6" height="56"/>
+                <rect class="rig-rail" x="226" y="42" width="130" height="3" rx="1.5"/>
+                <rect class="rig-stripe-glow" x="224" y="45" width="134" height="9" rx="4.5"/>
+                <rect class="rig-stripe" x="226" y="47" width="130" height="4" rx="2"/>
+                <g class="rig-wheel">
+                    <circle class="rig-wheel-out" cx="246" cy="70" r="14"/>
+                    <circle class="rig-wheel-knurl" cx="246" cy="70" r="12"/>
+                    <circle class="rig-wheel-in" cx="246" cy="70" r="8"/>
+                    <circle class="rig-wheel-cap" cx="246" cy="70" r="3.6"/>
+                </g>
+                <ellipse class="rig-holder-glow" cx="356" cy="110" rx="26" ry="6"/>
+                <rect class="rig-holder" x="332" y="94" width="48" height="12" rx="5"/>
+                <rect class="rig-claw" x="334" y="104" width="5" height="26" rx="2"/>
+                <rect class="rig-claw" x="353.5" y="104" width="5" height="28" rx="2"/>
+                <rect class="rig-claw" x="373" y="104" width="5" height="26" rx="2"/>
+                <g class="rig-top">
+                    <ellipse class="rig-top-blur" cx="356" cy="142" rx="42" ry="12"/>
+                    <path class="rig-top-chassis" d="M334 142 L378 142 L364 160 L348 160 Z"/>
+                    <path class="rig-top-tip" d="M351 160 L361 160 L356 173 Z"/>
+                    <ellipse class="rig-top-ring" cx="356" cy="141" rx="35" ry="9"/>
+                    <ellipse class="rig-top-dash" cx="356" cy="141" rx="35" ry="9"/>
+                    <rect class="rig-top-core" x="345" y="126" width="22" height="13" rx="4"/>
+                    <rect class="rig-top-core-hi" x="348" y="128" width="9" height="3" rx="1.5"/>
+                </g>
+                <rect class="rig-pin" x="186" y="64" width="16" height="8" rx="2"/>
+                <rect class="rig-tab" x="168" y="56" width="20" height="24" rx="4"/>
+                <rect class="rig-cord-bar" x="18" y="66" width="152" height="4" rx="2"/>
+                <g class="rig-handle-g">
+                    <rect class="rig-handle" x="148" y="55" width="20" height="26" rx="8"/>
+                    <rect class="rig-handle-slot" x="153" y="63" width="10" height="10" rx="5"/>
+                </g>
+            </g>
+        </svg>
+        <div id="launch-tilt" class="launch-tilt" data-tilt="0">
+            <span data-t="-1">← Bord</span><span data-t="0">Droit</span><span data-t="1">Centre →</span>
+        </div>
+        <div class="launch-track"><div id="launch-zone" class="launch-zone"></div><div id="launch-needle" class="launch-needle"></div></div>
+        <div id="launch-hint" class="launch-hint" aria-live="polite"></div>
+        <div class="launch-hold" title="Tirage : relâche quand la barre est dans la zone verte"><div id="launch-hold-band" class="launch-hold-band"></div><div id="launch-hold-fill" class="launch-hold-fill"></div></div>
+        <div class="launch-hold-labels" aria-hidden="true"><span class="lh-soft">MOU</span><span id="launch-hold-perfect" class="lh-perfect">PARFAIT</span><span class="lh-hard">TROP LONG</span></div>
+        <div id="launch-detail" class="launch-detail"></div>
+        <div class="launch-foot"><span id="launch-ready"></span><span id="launch-timer"></span></div>
+        <div id="launch-rules" class="launch-rules"></div>
+    </div>
+
+    <script src="combat_audio.js"></script>
+    <script src="window_layout.js"></script>
+    <script src="img/manifest.js"></script>
+    <script src="app.js"></script>
+    <script src="launch_gauge.js"></script>
+    <script src="match_summary.js"></script>
+</body>
+</html>
