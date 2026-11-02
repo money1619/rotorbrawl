@@ -5,7 +5,7 @@ lua54 'yes'
 
 name 'ROTORBRAWL'
 description '[Free edition / Édition gratuite] Tabletop spinning-top battles: server-authoritative duels, part assembly, shop, arenas and persistent ranking. | Combats de toupies mécaniques : duels autoritaires, assemblages, boutique, arènes et classement persistant.'
-version '0.6.0'
+version '0.6.1'
 
 -- framework (ESX / QBCore / Qbox), inventaire (ox complet ; qs / qb par menus) et ciblage (ox_target / qb-target)
 -- détectés par bridge/

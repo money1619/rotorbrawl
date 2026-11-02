@@ -1,5 +1,10 @@
 # CHANGELOG — ROTORBRAWL
 
+## 0.6.1 — descriptions bilingues, renforcement des licences — 2026-11-02
+- Descriptions du manifeste et des objets d'inventaire en anglais et en français ; README en anglais et en français.
+- Édition Pro : `escrow_ignore` (config, locales et objets restent modifiables malgré le chiffrement Cfx.re Asset Escrow).
+- Licence Pro renforcée (un serveur, responsabilité, remboursement, droit applicable) ; contact de support et district judiciaire à compléter.
+
 ## Renommage : ROTORBRAWL — 2026-11-02
 - Le produit s'appelle désormais **ROTORBRAWL** (ancien nom commercial : « SPIN ARENA »).
 - Textes visibles (interface, chat, locales, README, licences, docs) changés. **Identifiants techniques inchangés** pour ne pas casser les serveurs :
