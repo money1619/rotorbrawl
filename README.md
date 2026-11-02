@@ -7,6 +7,19 @@ de travail.
 > **Édition gratuite.** Une édition **Pro** existe (tournois, matchs homologués avec certificat signé, tables Turbo / Poche /
 > Colisée, arène transportable, quatre lanceurs de plus, trois pièces de plus).
 
+## Captures (prises en jeu)
+
+Les images montrent la version complète : la table **Turbo** et certains lanceurs (Manivelle, Ressort, Précision, Rail) sont réservés à l'édition Pro. L'édition gratuite a les tables Standard, Compacte, Éjection et Large, et le lanceur Cordon.
+
+![Jauge de lancer : tenir ESPACE dans la zone, relâcher d'un coup sec](screenshots/lancer-jauge.jpg)
+*Lancer en trois gestes : incliner, tenir ESPACE dans la zone, relâcher.*
+
+![Résultat d'un entraînement contre le bot](screenshots/victoire-entrainement.jpg)
+*Fin d'un entraînement : score, manches et durée.*
+
+![Lanceurs et toupies](screenshots/galerie-lanceurs-toupies.jpg)
+*Galerie de test : les lanceurs et les cinq familles de toupies.*
+
 ## Ce qui est inclus
 - Parcours **acheter → assembler → défier → combattre → réparer**.
 - Duels 1 contre 1 : le serveur calcule tout, les clients affichent. Entraînement contre un adversaire simulé.
