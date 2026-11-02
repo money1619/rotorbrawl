@@ -1,4 +1,69 @@
+# ROTORBRAWL — free edition
+
+**English** | [Français](#rotorbrawl--édition-gratuite)
+
+Tabletop spinning-top battles for FiveM: part assembly, server-decided duels, a per-server ranking. Original universe and names
+(no existing brand or toy). The resource is called `Chaos_Arena`; "ROTORBRAWL" is the product name.
+
+> **Free edition.** A **Pro** edition is planned (tournaments, ranked matches with a signed certificate, Turbo / Pocket /
+> Colosseum tables, a portable arena, four extra launchers, three extra parts). Not available yet.
+
+## Screenshots (taken in game)
+
+The images show the full version: the **Turbo** table and some launchers (Crank, Spring, Precision, Rail) are Pro-only. The free edition has the Standard, Compact, Ejection and Large tables and the Cord launcher.
+
+![Launch gauge: hold SPACE in the zone, release sharply](screenshots/lancer-jauge.jpg)
+*Three-step launch: tilt, hold SPACE in the zone, release.*
+
+![Practice result against the bot](screenshots/victoire-entrainement.jpg)
+*End of a practice match: score, rounds and duration.*
+
+![Launchers and tops](screenshots/galerie-lanceurs-toupies.jpg)
+*Test gallery: the launchers and the five top families.*
+
+## What is included
+- The **buy → assemble → challenge → fight → repair** loop.
+- 1v1 duels: the server computes everything, clients only render. Practice against a simulated opponent.
+- Four-part tops (Ring, Core, Lock, Tip), 18 parts, wear and repair.
+- Round finishes: Ring-out, Stop, Burst; points per round, first to 4.
+- Cord launcher with a pull gauge, two-hand animation.
+- Standard, Compact, Ejection and Large tables; fixed arenas placed with `/spin_admin arena add` or through `arena.fixedList` in
+  `config/server.lua`.
+- Shop (ox_inventory), server ranking, NUI interface.
+- Framework: **ESX Legacy tested in game** with ox_inventory and ox_target. QBCore and Qbox are supported by the built-in bridge (`bridge/`), with qb-inventory or qs-inventory (shop and workshop through menus; the drag-and-drop workshop needs ox_inventory) and qb-target, **but these setups have not been tested in game yet**: please report any problem.
+
+## Installation
+1. Dependencies: `oxmysql`, `ox_lib`, a framework (ESX, QBCore or Qbox), `ox_inventory`, `ox_target`. The framework / inventory
+   bridge ships in `bridge/` (open files, no other resource to install).
+2. Copy the `Chaos_Arena` folder into your resources.
+3. Add the items from `install/ox_inventory_items.lua` to ox_inventory and copy the images from `install/` into
+   `ox_inventory/web/images/`.
+4. `server.cfg`:
+   ```cfg
+   ensure oxmysql
+   ensure ox_lib
+   ensure es_extended      # or qb-core / qbx_core
+   ensure ox_target
+   ensure ox_inventory
+   ensure Chaos_Arena
+   add_ace group.admin command.spin_admin allow
+   add_ace group.admin spin_arena.admin allow
+   ```
+5. The resource creates its SQL tables at startup (see `sql/install.sql`). Back up before any migration.
+
+## Honest status
+Models, physics, interface and animations were checked offline (real engine, emulator, Lua/JS tests) and partly in game. Things to
+check on your server: model scale and orientation, launcher animations, the positions of your tables.
+
+## License
+`LICENSE`: modification allowed, resale forbidden, credit to AEOM Development required. Third-party components (ESX, ox_*,
+GTA V data) keep their own license; ROTORBRAWL is not affiliated with any publisher or toy manufacturer.
+
+---
+
 # ROTORBRAWL — édition gratuite
+
+[English](#rotorbrawl--free-edition) | **Français**
 
 Combats de toupies mécaniques pour FiveM : l'assemblage de pièces, des duels décidés par le serveur, un classement par serveur.
 Univers et noms originaux (aucune marque, aucun jouet existant). La ressource s'appelle `Chaos_Arena` ; « ROTORBRAWL » est un nom
