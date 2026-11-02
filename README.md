@@ -29,7 +29,7 @@ Les images montrent la version complète : la table **Turbo** et certains lanceu
 - Tables Standard, Compacte, Éjection, Large ; arènes fixes placées par `/spin_admin arena add` ou par `arena.fixedList` dans
   `config/server.lua`.
 - Boutique (ox_inventory), classement du serveur, interface NUI.
-- Compatible ESX / QBCore / Qbox, ox / qs / qb (voir `bridge/`).
+- Framework : **ESX Legacy testé en jeu** avec ox_inventory et ox_target. QBCore et Qbox sont pris en charge par le pont intégré (`bridge/`), avec qb-inventory ou qs-inventory (boutique et atelier par menus ; l'atelier par glisser-déposer exige ox_inventory) et qb-target, **mais ces configurations n'ont pas encore été testées en jeu** : signalez tout problème.
 
 ## Installation
 1. Dépendances : `oxmysql`, `ox_lib`, un framework (ESX, QBCore ou Qbox), `ox_inventory`, `ox_target`. Le pont
