@@ -54,7 +54,7 @@ function Vendor.sync(info)
                     SetBlipScale(blip, 0.75)
                     SetBlipColour(blip, 3)
                     SetBlipAsShortRange(blip, true)
-                    AddTextEntry('SPIN_ARENA_SHOP', 'Boutique SPIN ARENA')
+                    AddTextEntry('SPIN_ARENA_SHOP', 'Boutique ROTORBRAWL')
                     BeginTextCommandSetBlipName('SPIN_ARENA_SHOP')
                     EndTextCommandSetBlipName(blip)
                 end

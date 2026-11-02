@@ -1,4 +1,11 @@
-# CHANGELOG — SPIN ARENA
+# CHANGELOG — ROTORBRAWL
+
+## Renommage : ROTORBRAWL — 2026-11-02
+- Le produit s'appelle désormais **ROTORBRAWL** (ancien nom commercial : « SPIN ARENA »).
+- Textes visibles (interface, chat, locales, README, licences, docs) changés. **Identifiants techniques inchangés** pour ne pas casser les serveurs :
+  ressource `Chaos_Arena`, événements et exports `spin_arena:*`, objets `spin_top`/`spin_launcher`/…, modèles `spin_arena_*`, global `SpinArena`.
+- Hall du Dôme régénéré (enseignes « ROTORBRAWL » et « ENTER / GO! », plus aucune référence de marque tierce).
+- Retiré de `data/arenas.json` l'arène de test `test_turbo` laissée par une visite en jeu.
 
 ## 0.6.0 — administration, installation guidée, saisons, chargement par distance — 2026-10-30
 Essayé en jeu : vérification d'installation, panneau (instantané serveur, création et annulation d'un tournoi), chargement par
@@ -99,7 +106,7 @@ distance, places assises sur les gradins du Dôme. Seulement hors jeu : récompe
 - **Caméra du public :** client/stands_camera.lua ; sur les rangs (debout ou assis), G passe de la vue « Cuvette » (oblique, côté
   entrée, 0,75 m au-dessus du fond) à la vue « Dessus » (2,3 m), puis revient à la vue normale. Coupée en quittant les gradins, à la
   mort et à l'arrêt de la ressource. Locale, sans effet sur le match. Cadrage à régler en jeu. Pro.
-- **Blip de la Colisée :** icône plus grosse, jaune, visible de loin, « Colisée SPIN ARENA » (config `arenaVariants.colisee.blip`).
+- **Blip de la Colisée :** icône plus grosse, jaune, visible de loin, « Colisée ROTORBRAWL » (config `arenaVariants.colisee.blip`).
 - **Gains de tournoi :** vainqueur et finaliste payés par le serveur (`tournaments.rewards`, par taille de tableau), DÉSACTIVÉS par
   défaut (argent créé : à régler selon ton économie). Annonce « le tournoi commence » à toute la ville.
 - **Un modèle 3D par lanceur :** `spin_launcher_crank` (grande manivelle), `_spring` (ressort apparent), `_precision` (canon
@@ -257,7 +264,7 @@ est à nous : le vocabulaire des finitions, les pièces et l'interface s'inspire
 
 ## Boutique unique — 2026-10-18 (demande de Money)
 
-- Une seule interaction ox_target sur le vendeur (« Boutique SPIN ARENA ») ouvre l'onglet **Boutique** de l'interface Arena, avec les catégories en onglets internes : Toupies, Lanceurs, Pièces détachées, Réparation. Fini les quatre options sur le PNJ, la zone ox_target en double au même endroit et les cinq boutiques natives d'ox_inventory qui ajoutaient leurs propres cibles.
+- Une seule interaction ox_target sur le vendeur (« Boutique ROTORBRAWL ») ouvre l'onglet **Boutique** de l'interface Arena, avec les catégories en onglets internes : Toupies, Lanceurs, Pièces détachées, Réparation. Fini les quatre options sur le PNJ, la zone ox_target en double au même endroit et les cinq boutiques natives d'ox_inventory qui ajoutaient leurs propres cibles.
 - Achat par le nouveau callback `spin_arena:shop_buy` : seuls l'identifiant d'article (`catégorie:clé`), la quantité et le point de vente partent du client. Le serveur revérifie la boutique, les 3 m, l'article dans **son** catalogue, la quantité (objets non empilables : 1 ; empilables : 1 à `shop.maxCount`), les toupies réelles, l'argent (`shop.currency`, objet ox_inventory) et la place, puis débite et livre ; remboursement si la livraison échoue. Fréquence limitée (`rateLimits.shopBuy`), schéma strict (un champ prix est refusé).
 - Interface : solde affiché, articles trop chers désactivés, messages d'erreur en français, libellés échappés.
 - Débit, livraison et remboursement vérifiés (erreur levée = échec) ; si ni la livraison ni le remboursement ne passent, l'achat est consigné comme **non résolu** (console, `/spin_admin achats`) sans prétendre avoir remboursé ni réessayer à l'aveugle. Les trois appels sont des exports synchrones : la source ne peut pas changer de joueur pendant l'achat.

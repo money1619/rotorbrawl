@@ -1,5 +1,5 @@
 -- ============================================================================
--- SPIN ARENA — Interface NUI HTML (web/index.html, web/style.css, web/app.js)
+-- ROTORBRAWL — Interface NUI HTML (web/index.html, web/style.css, web/app.js)
 -- ============================================================================
 -- Se greffe sur SpinArena.Client sans modifier le protocole serveur ni remplacer
 -- la boutique sécurisée d'ox_inventory. Préserve le repli ox_lib lorsque les

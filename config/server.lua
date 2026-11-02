@@ -1,4 +1,4 @@
--- SPIN ARENA — configuration serveur (jamais envoyée aux clients : déclarée seulement en server_scripts)
+-- ROTORBRAWL — configuration serveur (jamais envoyée aux clients : déclarée seulement en server_scripts)
 SpinArena = SpinArena or {}
 
 SpinArena.ServerConfig = {

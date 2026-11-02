@@ -1,4 +1,4 @@
--- SPIN ARENA — résumé de fin de match (web/match_summary.js). Données serveur uniquement (matchEnd.summary,
+-- ROTORBRAWL — résumé de fin de match (web/match_summary.js). Données serveur uniquement (matchEnd.summary,
 -- contrat proposé à Archimedes) ; affiché chez les duellistes seulement (champ side du message), sans focus.
 SpinArena = SpinArena or {}
 local S = {}

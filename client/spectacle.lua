@@ -1,4 +1,4 @@
--- SPIN ARENA — Spectacle du combat. Fichier : client/spectacle.lua
+-- ROTORBRAWL — Spectacle du combat. Fichier : client/spectacle.lua
 -- Affichage seulement : traînées lumineuses, lueur des toupies, éclairs des chocs, poches éclairées, vol d'une toupie
 -- éjectée jusqu'au sol, chute d'une toupie arrêtée, inclinaison dans les virages et ralenti du coup final.
 -- Tout part des positions déjà reçues du serveur (keyframes) : rien ici ne change le résultat ni n'envoie de message.

@@ -1,4 +1,4 @@
--- SPIN ARENA — configuration partagée (phase 1 : prototype physique)
+-- ROTORBRAWL — configuration partagée (phase 1 : prototype physique)
 -- Valeurs de départ de docs/PHYSICS.md §13, à calibrer. Aucune valeur de ce fichier
 -- n'est relue depuis un client : le serveur utilise sa propre copie.
 SpinArena = SpinArena or {}

@@ -1,7 +1,7 @@
-# SPIN ARENA — édition gratuite
+# ROTORBRAWL — édition gratuite
 
 Combats de toupies mécaniques pour FiveM : l'assemblage de pièces, des duels décidés par le serveur, un classement par serveur.
-Univers et noms originaux (aucune marque, aucun jouet existant). La ressource s'appelle `Chaos_Arena` ; « SPIN ARENA » est un nom
+Univers et noms originaux (aucune marque, aucun jouet existant). La ressource s'appelle `Chaos_Arena` ; « ROTORBRAWL » est un nom
 de travail.
 
 > **Édition gratuite.** Une édition **Pro** existe (tournois, matchs homologués avec certificat signé, tables Turbo / Poche /
@@ -56,4 +56,4 @@ partie en jeu. Les points à contrôler sur ton serveur : échelle et orientatio
 
 ## Licence
 `LICENSE` : modification autorisée, revente interdite, crédit obligatoire à AEOM Development. Les éléments de tiers (ESX, ox_*,
-données GTA V) gardent leur licence ; SPIN ARENA n'est affilié à aucun éditeur ni fabricant de jouets.
+données GTA V) gardent leur licence ; ROTORBRAWL n'est affilié à aucun éditeur ni fabricant de jouets.

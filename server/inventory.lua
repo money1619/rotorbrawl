@@ -5,7 +5,7 @@
 -- Sans inventaire : seules les toupies de test sont disponibles.
 SpinArena = SpinArena or {}
 
-local Store = Inv   -- pont AEOM (global), masqué ci-dessous par le module propre à SPIN ARENA
+local Store = Inv   -- pont AEOM (global), masqué ci-dessous par le module propre à ROTORBRAWL
 local Inv = { locked = {}, hooks = {} }
 
 Inv.ITEM_TOP = 'spin_top'

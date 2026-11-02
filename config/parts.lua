@@ -1,4 +1,4 @@
--- SPIN ARENA — catalogue des pièces (phase 4, refonte du 29/10), partagé : le client l'affiche, le serveur seul l'applique.
+-- ROTORBRAWL — catalogue des pièces (phase 4, refonte du 29/10), partagé : le client l'affiche, le serveur seul l'applique.
 -- Chaque toupie a quatre étages : la Lame (contact, attaque/défense), le Noyau (masse et réserve de rotation), le
 -- Verrou (hauteur, stabilité, résistance à l'éclatement : `burst`) et l'Embout (pointe, mobilité, accroche du rail
 -- turbo : `dash`). Les clés internes (ring, core, frame, tip) ne changent pas : les toupies déjà assemblées restent

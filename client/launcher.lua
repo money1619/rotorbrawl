@@ -1,4 +1,4 @@
--- SPIN ARENA — Lanceur en main : props (lanceur à poignée pistolet, toupie suspendue sous ses griffes, cordon de
+-- ROTORBRAWL — Lanceur en main : props (lanceur à poignée pistolet, toupie suspendue sous ses griffes, cordon de
 -- tirette) et animations. Fichier : client/launcher.lua
 -- Seul le joueur qui lance voit ces props : ils sont locaux (CreateObject non réseau), comme ceux de la cuvette.
 -- Déroulé d'une manche (chaque étape est annoncée par client/launch.lua et client/renderer.lua) :
@@ -708,7 +708,7 @@ end
 local function say(msg)
     if type(print) == 'function' then print('[spin_arena] ' .. msg) end
     if type(TriggerEvent) == 'function' then
-        TriggerEvent('chat:addMessage', { args = { 'SPIN ARENA', msg } })
+        TriggerEvent('chat:addMessage', { args = { 'ROTORBRAWL', msg } })
     end
 end
 

@@ -1,11 +1,11 @@
--- SPIN ARENA — panneau d'administration en jeu : /spin_panel (menu ox_lib). Voir server/admin_panel.lua (le serveur vérifie les droits).
+-- ROTORBRAWL — panneau d'administration en jeu : /spin_panel (menu ox_lib). Voir server/admin_panel.lua (le serveur vérifie les droits).
 SpinArena = SpinArena or {}
 
 local Panel = {}
 SpinArena.AdminPanelClient = Panel
 
 local function notify(text, kind)
-    if type(lib) == 'table' and lib.notify then lib.notify({ title = 'SPIN ARENA', description = text, type = kind or 'inform' }) end
+    if type(lib) == 'table' and lib.notify then lib.notify({ title = 'ROTORBRAWL', description = text, type = kind or 'inform' }) end
 end
 
 local function refresh() Panel.open() end
@@ -59,7 +59,7 @@ function Panel.menus(snap)
         description = snap.unresolved > 0 and 'À régulariser : commande /spin_admin achats dans la console' or 'Aucun',
     }
     main[#main + 1] = { title = 'Actualiser', icon = 'rotate', onSelect = refresh }
-    lib.registerContext({ id = 'spin_panel', title = 'SPIN ARENA — administration', options = main })
+    lib.registerContext({ id = 'spin_panel', title = 'ROTORBRAWL — administration', options = main })
 end
 
 function Panel.open()

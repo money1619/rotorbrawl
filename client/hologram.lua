@@ -1,4 +1,4 @@
--- SPIN ARENA — panneau lumineux au-dessus de chaque table, visible dans le monde par les joueurs autour.
+-- ROTORBRAWL — panneau lumineux au-dessus de chaque table, visible dans le monde par les joueurs autour.
 -- Lecture seule des scènes du rendu (contrat d'Archimedes : SpinArena.Renderer.scenes() / onScenesChanged) :
 -- tout vient des événements serveur (préparation, compte à rebours, score, fin) ; rien n'est calculé ici sauf
 -- l'affichage du décompte jusqu'à goAt (GetGameTimer local, fixé par le rendu à partir de startsInMs).
@@ -41,7 +41,7 @@ function H.lines(scene, nowMs)
     if not title and type(scene.stationId) == 'string' then
         title = scene.stationId:gsub('_', ' '):gsub('^%l', string.upper)
     end
-    title = tostring(title or 'SPIN ARENA')
+    title = tostring(title or 'ROTORBRAWL')
     if scene.practice then title = title .. ' · Entraînement' end
     local st = scene.state
     local L = {}

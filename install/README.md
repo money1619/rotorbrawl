@@ -1,4 +1,4 @@
-# SPIN ARENA (Chaos_Arena) — installation des objets
+# ROTORBRAWL (Chaos_Arena) — installation des objets
 
 ox_inventory 2.45.0 déclare ses objets dans `ox_inventory/data/items.lua` : les objets ne passent **pas** par SQL.
 Le SQL du script est réel mais concerne ses **données** (toupies, classement, journal) : `sql/install.sql`, rejouable,
@@ -21,4 +21,4 @@ Les pièces partagent l'objet `spin_part` ; chaque pièce choisit son icône par
 **28/10/2026 :** `spin_part_ring_reverse.png` (anneau inversé) est nouveau : à copier dans `ox_inventory/web/images/`.
 
 ## Provenance des images
-Toutes les icones sont originales : `spin_top`, `spin_part`, `spin_repair_kit` sont dessinees pour SPIN ARENA ; les icones des pieces et du lanceur sont rendues depuis les modeles 3D du script.
+Toutes les icones sont originales : `spin_top`, `spin_part`, `spin_repair_kit` sont dessinees pour ROTORBRAWL ; les icones des pieces et du lanceur sont rendues depuis les modeles 3D du script.

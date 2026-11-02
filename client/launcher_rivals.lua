@@ -1,4 +1,4 @@
--- SPIN ARENA — Lanceurs des AUTRES participants. Fichier : client/launcher_rivals.lua
+-- ROTORBRAWL — Lanceurs des AUTRES participants. Fichier : client/launcher_rivals.lua
 -- Les props du lanceur (client/launcher.lua) sont locaux : sans ce module, seul le joueur qui lance voit son lanceur.
 -- Ici, chaque client crée ses propres copies locales (non réseau) du lanceur et de la toupie accrochée, fixées à la
 -- main du personnage de chaque autre participant (adversaire, ou les deux duellistes pour un spectateur) :

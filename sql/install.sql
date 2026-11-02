@@ -1,4 +1,4 @@
--- SPIN ARENA — schéma (phase 4). Rejouable : chaque instruction est idempotente.
+-- ROTORBRAWL — schéma (phase 4). Rejouable : chaque instruction est idempotente.
 -- Le serveur exécute aussi ces instructions au démarrage si oxmysql est disponible (server/database.lua).
 
 CREATE TABLE IF NOT EXISTS `spin_tops` (

@@ -1,4 +1,4 @@
--- SPIN ARENA — Phases 1 & 2 : Point d'entrée client, menus ox_lib, ciblage ox_target et événements
+-- ROTORBRAWL — Phases 1 & 2 : Point d'entrée client, menus ox_lib, ciblage ox_target et événements
 -- Fichier : client/main.lua
 -- Écoute uniquement les événements serveur -> client autoritaires (spin_arena:cl:*)
 -- et n'envoie que des intentions via lib.callback.await (spin_arena:*).
@@ -87,7 +87,7 @@ end
 
 -- Traduction avec repli sûr si locales/*.lua n'a pas encore été chargé dans un test unitaire isolé
 local FALLBACK_FR = {
-    home_title                = 'SPIN ARENA',
+    home_title                = 'ROTORBRAWL',
     home_challenges           = 'Défis en cours',
     ok                        = 'Opération effectuée.',
     rate_limited              = 'Action trop rapide. Veuillez patienter un instant.',
@@ -107,14 +107,14 @@ local FALLBACK_FR = {
     other_bucket              = 'Ce joueur ne se trouve pas dans la même instance.',
     offline                   = 'Le joueur ciblé n\'est plus connecté.',
     no_top                    = 'Cette toupie est introuvable dans votre inventaire.',
-    no_launcher               = 'Il te faut un lanceur dans ton inventaire. Passe à la boutique SPIN ARENA.',
+    no_launcher               = 'Il te faut un lanceur dans ton inventaire. Passe à la boutique ROTORBRAWL.',
     top_locked                = 'Cette toupie est déjà engagée dans un match ou à l\'atelier.',
     top_invalid               = 'L\'assemblage de cette toupie est invalide.',
     no_part                   = 'Pièce ou kit de réparation manquant dans votre inventaire.',
     inventory_full            = 'Votre inventaire est plein.',
     over_budget               = 'Cet assemblage dépasse le budget maximal de 100 points.',
     db_unavailable            = 'Base de données ou inventaire momentanément indisponible.',
-    pro_only                  = 'Cette fonction fait partie de l\'édition Pro de SPIN ARENA.',
+    pro_only                  = 'Cette fonction fait partie de l\'édition Pro de ROTORBRAWL.',
     not_allowed               = 'Vous n\'avez pas la permission d\'effectuer cette action.',
     tournament_closed         = 'Les inscriptions à ce tournoi sont fermées.',
     tournament_full           = 'Ce tournoi est complet.',
@@ -132,13 +132,13 @@ local FALLBACK_FR = {
     tournament_no_winner      = 'Le tournoi « {tournament} » s\'est terminé sans vainqueur.',
     tournament_cancelled      = 'Le tournoi « {tournament} » a été annulé ({reason}).',
     tournament_invalid_top    = 'Tournoi « {tournament} » : votre toupie inscrite est indisponible ({code}).',
-    dialog_title              = 'SPIN ARENA — Duel de toupies',
+    dialog_title              = 'ROTORBRAWL — Duel de toupies',
     dialog_select_top         = 'Choisir le profil de toupie',
     dialog_top_attack         = 'Prototype A (Attaque)',
     dialog_top_endurance      = 'Prototype E (Endurance)',
-    target_challenge          = 'Défier à SPIN ARENA',
+    target_challenge          = 'Défier à ROTORBRAWL',
     target_station_challenge  = 'Défier sur cette station',
-    station_title             = 'Station SPIN ARENA — {station}',
+    station_title             = 'Station ROTORBRAWL — {station}',
     station_no_opponents      = 'Aucun adversaire à proximité de la station.',
     station_opponent_desc     = 'Joueur #{id} ({distance} m)',
     target_accept             = 'Accepter le défi',
@@ -146,18 +146,18 @@ local FALLBACK_FR = {
     target_cancel             = 'Annuler mon défi',
     target_forfeit            = 'Abandonner le match',
     target_workshop           = 'Atelier de toupies (Mes toupies)',
-    target_shop               = 'Boutique SPIN ARENA',
-    target_leaderboard        = 'Classement SPIN ARENA',
-    target_tournaments        = 'Tournois SPIN ARENA',
-    shop_unavailable          = 'La boutique SPIN ARENA est actuellement indisponible.',
-    leaderboard_title         = 'Classement SPIN ARENA — Saison {season}',
+    target_shop               = 'Boutique ROTORBRAWL',
+    target_leaderboard        = 'Classement ROTORBRAWL',
+    target_tournaments        = 'Tournois ROTORBRAWL',
+    shop_unavailable          = 'La boutique ROTORBRAWL est actuellement indisponible.',
+    leaderboard_title         = 'Classement ROTORBRAWL — Saison {season}',
     leaderboard_me_title      = 'Mon classement : #{rank} ({rating} Elo)',
     leaderboard_me_unranked   = 'Mon classement : Non classé ({rating} Elo)',
     leaderboard_me_desc       = '{name} — Bilan : {w}V - {l}D - {d}N',
     leaderboard_row_title     = '#{rank} — {name} ({rating} Elo)',
     leaderboard_row_desc      = 'Bilan : {w}V - {l}D - {d}N',
     leaderboard_empty         = 'Aucun joueur classé pour cette saison.',
-    tournaments_title         = 'Tournois SPIN ARENA',
+    tournaments_title         = 'Tournois ROTORBRAWL',
     tournaments_empty         = 'Aucun tournoi actif ou récent.',
     tournament_create_title   = 'Créer un tournoi',
     tournament_create_desc    = 'Ouvrir les inscriptions d\'un nouveau tournoi (4, 8 ou 16 joueurs)',
@@ -182,7 +182,7 @@ local FALLBACK_FR = {
     tournament_created_ok     = 'Tournoi « {name} » (#{id}) créé avec succès.',
     tournament_joined_ok      = 'Inscription au tournoi #{id} confirmée ({players}/{size}).',
     tournament_left_ok        = 'Vous avez quitté le tournoi.',
-    workshop_title            = 'SPIN ARENA — Mes toupies',
+    workshop_title            = 'ROTORBRAWL — Mes toupies',
     workshop_empty            = 'Aucune toupie dans votre inventaire.',
     workshop_top_desc         = '[{uid}] Famille : {family} | Peinture : {paint} | Budget : {cost}/{budget} | Usure : {wear} | Bilan : {w}V-{l}D-{d}N',
     workshop_stats_title      = 'Caractéristiques de combat',
@@ -230,7 +230,7 @@ end
 function Client.notify(description, notifType, title)
     local msg = tostring(description or '')
     local kind = notifType or 'inform'
-    local hdr = title or 'SPIN ARENA'
+    local hdr = title or 'ROTORBRAWL'
     Client.lastNotification = { title = hdr, description = msg, type = kind, atMs = nowMs() }
 
     if type(lib) == 'table' and type(lib.notify) == 'function' then
@@ -1492,7 +1492,7 @@ end
 -- l'assemblage et la réparation par glisser-déposer.
 
 -- ============================================================================
--- STATIONS FIXES SPIN ARENA (blips + ox_target + défi réservé exclusif, sans objet réseau)
+-- STATIONS FIXES ROTORBRAWL (blips + ox_target + défi réservé exclusif, sans objet réseau)
 -- ============================================================================
 
 function Client.clearStations()
@@ -1647,7 +1647,7 @@ function Client.syncStationTargets(stations)
                     if type(SetBlipColour) == 'function' then SetBlipColour(blip, st.busy and 1 or (own.colour or 47)) end
                     if type(SetBlipAsShortRange) == 'function' then SetBlipAsShortRange(blip, own.shortRange ~= false) end
                     local blipText = own.label and 'SPIN_ARENA_STATION_' .. tostring(st.variant) or 'SPIN_ARENA_STATION'
-                    if type(AddTextEntry) == 'function' then AddTextEntry(blipText, own.label or 'Station SPIN ARENA') end
+                    if type(AddTextEntry) == 'function' then AddTextEntry(blipText, own.label or 'Station ROTORBRAWL') end
                     if type(BeginTextCommandSetBlipName) == 'function' then BeginTextCommandSetBlipName(blipText) end
                     if type(EndTextCommandSetBlipName) == 'function' then EndTextCommandSetBlipName(blip) end
                 end
@@ -1731,7 +1731,7 @@ function Client.syncStationTargets(stations)
 end
 
 -- ============================================================================
--- BOUTIQUE SPIN ARENA (spin_arena:shop + ox_target + ox_inventory:openInventory)
+-- BOUTIQUE ROTORBRAWL (spin_arena:shop + ox_target + ox_inventory:openInventory)
 -- ============================================================================
 
 function Client.removeShopZones()

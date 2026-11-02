@@ -1,4 +1,4 @@
--- SPIN ARENA — Phases 1 & 2 : Rendu géométrique temporaire, interpolation et HUD multijoueur
+-- ROTORBRAWL — Phases 1 & 2 : Rendu géométrique temporaire, interpolation et HUD multijoueur
 -- Fichier : client/renderer.lua
 -- Autorité : serveur uniquement. Aucun calcul physique d'autorité côté client.
 -- Compatible Lua 5.4 hors jeu (fonctions pures d'interpolation/décodage testables) et runtime CfxLua FiveM.
@@ -995,19 +995,19 @@ local function drawTemporaryTelemetry(scene, interp, now)
             local wName = winnerDisplayName(scene, mo.winner)
             drawOverlayText(
                 0.5, 0.080, 0.50,
-                string.format('SPIN ARENA — VICTOIRE FINALE : %s (%d - %d) [%s]', tostring(wName), sA, sB, reasonStr),
+                string.format('ROTORBRAWL — VICTOIRE FINALE : %s (%d - %d) [%s]', tostring(wName), sA, sB, reasonStr),
                 COLOR_GOLD.r, COLOR_GOLD.g, COLOR_GOLD.b, 250, true
             )
         elseif reasonStr == 'no_contest' then
             drawOverlayText(
                 0.5, 0.080, 0.48,
-                string.format('SPIN ARENA — MATCH SANS RÉSULTAT (%s)', tostring((mo.detail and mo.detail.why) or reasonStr)),
+                string.format('ROTORBRAWL — MATCH SANS RÉSULTAT (%s)', tostring((mo.detail and mo.detail.why) or reasonStr)),
                 COLOR_DANGER.r, COLOR_DANGER.g, COLOR_DANGER.b, 245, true
             )
         else
             drawOverlayText(
                 0.5, 0.080, 0.48,
-                string.format('SPIN ARENA — ÉGALITÉ FINALE (%d - %d) [%s]', sA, sB, reasonStr),
+                string.format('ROTORBRAWL — ÉGALITÉ FINALE (%d - %d) [%s]', sA, sB, reasonStr),
                 COLOR_SUCCESS.r, COLOR_SUCCESS.g, COLOR_SUCCESS.b, 245, true
             )
         end
@@ -1016,13 +1016,13 @@ local function drawTemporaryTelemetry(scene, interp, now)
             local rem = math_max(0.0, (scene.t0 - now) * 0.001)
             drawOverlayText(
                 0.5, 0.080, 0.46,
-                string.format('SPIN ARENA — MANCHE %d — LANCEMENT DANS %.1f s', roundNum, rem),
+                string.format('ROTORBRAWL — MANCHE %d — LANCEMENT DANS %.1f s', roundNum, rem),
                 0, 229, 255, 245, true
             )
         else
             drawOverlayText(
                 0.5, 0.080, 0.46,
-                string.format('SPIN ARENA — MANCHE %d — PRÉPARATION...', roundNum),
+                string.format('ROTORBRAWL — MANCHE %d — PRÉPARATION...', roundNum),
                 0, 229, 255, 245, true
             )
         end
@@ -1031,7 +1031,7 @@ local function drawTemporaryTelemetry(scene, interp, now)
         local winTxt = out.winner and string.format('VAINQUEUR : %s', tostring(winnerDisplayName(scene, out.winner))) or 'ÉGALITÉ'
         drawOverlayText(
             0.5, 0.080, 0.48,
-            string.format('SPIN ARENA — FIN MANCHE %d — %s (%s)', roundNum, winTxt, tostring(out.reason or 'time')),
+            string.format('ROTORBRAWL — FIN MANCHE %d — %s (%s)', roundNum, winTxt, tostring(out.reason or 'time')),
             COLOR_SUCCESS.r, COLOR_SUCCESS.g, COLOR_SUCCESS.b, 245, true
         )
     elseif interp then
@@ -1039,7 +1039,7 @@ local function drawTemporaryTelemetry(scene, interp, now)
         local syncWarn = interp.starving and ' [SYNCHRONISATION...]' or ''
         drawOverlayText(
             0.5, 0.080, 0.40,
-            string.format('SPIN ARENA — MANCHE %d — %.1f s%s', roundNum, tElapsed, syncWarn),
+            string.format('ROTORBRAWL — MANCHE %d — %.1f s%s', roundNum, tElapsed, syncWarn),
             216, 222, 233, 235, true
         )
     end

@@ -1,4 +1,4 @@
--- SPIN ARENA — lancement manuel, côté joueur (jauge web/launch_gauge.js). Serveur : server/matches.lua (Archimedes).
+-- ROTORBRAWL — lancement manuel, côté joueur (jauge web/launch_gauge.js). Serveur : server/matches.lua (Archimedes).
 --   serveur → client  P.ev.prepare { matchId, round, revision, deadlineInMs, ready = { bool, bool }, rules }
 --   client  → serveur P.cb.launchArm     { matchId, round }        → { ok, code, nonce, gauge, expiresInMs, minHoldMs, deadlineInMs }
 --   client  → serveur P.cb.launchRelease { matchId, round, nonce } → { ok, code, grade }
@@ -282,9 +282,9 @@ if type(RegisterCommand) == 'function' then
     RegisterCommand('spin_tilt_edge', function() LC.setTilt(-1) end, false)
     RegisterCommand('spin_tilt_center', function() LC.setTilt(1) end, false)
     if type(RegisterKeyMapping) == 'function' then
-        RegisterKeyMapping('+spin_pull', 'SPIN ARENA · Lanceur : saisir (tenir) puis tirer (relâcher)', 'keyboard', 'SPACE')
-        RegisterKeyMapping('spin_tilt_edge', 'SPIN ARENA · Lanceur : incliner vers le bord', 'keyboard', 'LEFT')
-        RegisterKeyMapping('spin_tilt_center', 'SPIN ARENA · Lanceur : incliner vers le centre', 'keyboard', 'RIGHT')
+        RegisterKeyMapping('+spin_pull', 'ROTORBRAWL · Lanceur : saisir (tenir) puis tirer (relâcher)', 'keyboard', 'SPACE')
+        RegisterKeyMapping('spin_tilt_edge', 'ROTORBRAWL · Lanceur : incliner vers le bord', 'keyboard', 'LEFT')
+        RegisterKeyMapping('spin_tilt_center', 'ROTORBRAWL · Lanceur : incliner vers le centre', 'keyboard', 'RIGHT')
     end
 end
 if type(RegisterNUICallback) == 'function' then

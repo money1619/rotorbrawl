@@ -3,7 +3,7 @@ game 'gta5'
 author 'AEOM Development'
 lua54 'yes'
 
-name 'SPIN ARENA'
+name 'ROTORBRAWL'
 description '[Édition gratuite] Combats de toupies mécaniques : duels autoritaires, assemblages, boutique, arènes et classement persistant.'
 version '0.6.0'
 

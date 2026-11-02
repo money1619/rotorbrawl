@@ -3,7 +3,7 @@
 -- Toutes les informations viennent du serveur (OneSync), jamais d'un message du client.
 SpinArena = SpinArena or {}
 
-local Core = Bridge   -- pont AEOM (global), masqué ci-dessous par le Bridge propre à SPIN ARENA
+local Core = Bridge   -- pont AEOM (global), masqué ci-dessous par le Bridge propre à ROTORBRAWL
 local Bridge = {}
 
 function Bridge.online(src)

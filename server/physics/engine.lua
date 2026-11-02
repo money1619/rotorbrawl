@@ -1,4 +1,4 @@
--- Moteur de manche SPIN ARENA (docs/PHYSICS.md) : état, pas fixe, fin de manche, keyframes.
+-- Moteur de manche ROTORBRAWL (docs/PHYSICS.md) : état, pas fixe, fin de manche, keyframes.
 -- Module pur en Lua 5.4 standard : aucune native FiveM, aucune horloge, aucun pairs() dans la boucle.
 SpinArena = SpinArena or {}
 

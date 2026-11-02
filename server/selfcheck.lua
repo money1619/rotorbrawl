@@ -1,4 +1,4 @@
--- SPIN ARENA — vérification guidée de l'installation (30/10).
+-- ROTORBRAWL — vérification guidée de l'installation (30/10).
 -- Au démarrage (et avec la commande /spin_check, console ou administrateur), liste ce qui manque pour que le script marche :
 -- ressources non démarrées, objets ox_inventory absents, droits (ACE) non donnés. Ne bloque rien : elle informe seulement.
 -- collect(env) est pur (tout ce qui vient du serveur passe par `env`) pour pouvoir être testé hors jeu.
@@ -48,7 +48,7 @@ function Check.collect(env)
     if env.principalAce('group.admin', adminAce) and env.principalAce('group.admin', 'command.spin_admin') then
         add('ok', 'droits administrateur donnés au groupe group.admin')
     else
-        add('warn', 'le groupe group.admin n\'a pas tous les droits SPIN ARENA : ajoute dans server.cfg « add_ace group.admin '
+        add('warn', 'le groupe group.admin n\'a pas tous les droits ROTORBRAWL : ajoute dans server.cfg « add_ace group.admin '
             .. adminAce .. ' allow » et « add_ace group.admin command.spin_admin allow » (sinon /spin_admin est refusée)')
     end
     if cfg.allowTestProfiles then
@@ -101,7 +101,7 @@ if type(RegisterCommand) == 'function' then
         if src == 0 then return Check.run() end
         local lines = {}
         Check.run(function(t) lines[#lines + 1] = (t:gsub('%^%d', '')) end)
-        TriggerClientEvent('chat:addMessage', src, { args = { 'SPIN ARENA', table.concat(lines, '\n') } })
+        TriggerClientEvent('chat:addMessage', src, { args = { 'ROTORBRAWL', table.concat(lines, '\n') } })
     end, true)
 end
 

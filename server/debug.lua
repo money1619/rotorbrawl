@@ -1,4 +1,4 @@
--- SPIN ARENA — commandes de test (administrateurs uniquement, ACE command.spin_test)
+-- ROTORBRAWL — commandes de test (administrateurs uniquement, ACE command.spin_test)
 --   /spin_test pratique [table] [ma_toupie] [adversaire]    ENTRAÎNEMENT avec le vrai parcours : match réel sur une
 --       table (nom de station, ou la plus proche libre, sinon devant l'admin), préparation volontaire du lanceur
 --       (jauge, animation), adversaire SIMULÉ par le serveur qui lance seul, départ commun, combat visible des joueurs
@@ -31,7 +31,7 @@ local function reply(src, msg)
     if src == 0 then
         log('%s', msg)
     else
-        TriggerClientEvent('chat:addMessage', src, { args = { 'SPIN ARENA', msg } })
+        TriggerClientEvent('chat:addMessage', src, { args = { 'ROTORBRAWL', msg } })
     end
 end
 

@@ -1,4 +1,4 @@
--- SPIN ARENA — toupie assemblée à partir des modèles de ses pièces (29/10).
+-- ROTORBRAWL — toupie assemblée à partir des modèles de ses pièces (29/10).
 -- Chaque pièce du catalogue a son modèle (stream/spin_pt_<identifiant>.ydr : tools/models/build_parts.py), tous dessinés
 -- dans le repère de la toupie assemblée (origine = pointe de l'embout, axe = Z). Une toupie à l'écran = quatre objets
 -- locaux : l'EMBOUT est la racine, le verrou, la lame et le noyau y sont attachés sans décalage. Tout le reste du client

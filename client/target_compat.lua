@@ -1,4 +1,4 @@
--- Ciblage de SPIN ARENA : même API qu'ox_target (appels avec « : »), quel que soit le script de ciblage.
+-- Ciblage de ROTORBRAWL : même API qu'ox_target (appels avec « : »), quel que soit le script de ciblage.
 --   ox_target : TargetCompat = exports.ox_target (comportement d'origine, inchangé)
 --   qb-target : traduction par le pont AEOM (bridge/client.lua, Target.*)
 --   aucun     : TargetCompat = nil (les interactions passent par le menu F7)

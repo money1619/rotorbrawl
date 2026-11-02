@@ -1,4 +1,4 @@
--- SPIN ARENA — Effets visuels GTA et sons mécaniques originaux synthétisés dans la NUI.
+-- ROTORBRAWL — Effets visuels GTA et sons mécaniques originaux synthétisés dans la NUI.
 -- Fichier : client/effects.lua
 -- Particules natives déjà présentes dans les ressources installées. Sons originaux Web Audio ;
 -- sons natifs historiques en repli lorsque la NUI est indisponible.

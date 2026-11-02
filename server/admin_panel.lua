@@ -1,4 +1,4 @@
--- SPIN ARENA — panneau d'administration en jeu (30/10) : /spin_panel (menu ox_lib).
+-- ROTORBRAWL — panneau d'administration en jeu (30/10) : /spin_panel (menu ox_lib).
 -- Le serveur donne un instantané (matchs, tournois, arènes, achats non résolus) et exécute quelques actions, TOUJOURS après avoir
 -- vérifié le droit d'administrateur (ACE spin_arena.admin) : le client ne décide de rien. Les actions réutilisent les fonctions des
 -- commandes /spin_admin (mêmes règles, mêmes journaux).

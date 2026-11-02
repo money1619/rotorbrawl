@@ -29,7 +29,7 @@ function Concierge.spawn()
         SetBlockingOfNonTemporaryEvents(ped, true)
         if not TargetCompat then return end -- aucun script de ciblage : accueil sans option (client/target_compat.lua)
         TargetCompat:addLocalEntity(ped, {{
-            name = 'spin_arena:concierge', icon = 'fa-solid fa-circle-dot', label = 'Accueil SPIN ARENA', distance = 2.0,
+            name = 'spin_arena:concierge', icon = 'fa-solid fa-circle-dot', label = 'Accueil ROTORBRAWL', distance = 2.0,
             canInteract = function()
                 local match = SpinArena.Client.state.match
                 return not (match and match.role == 'participant')

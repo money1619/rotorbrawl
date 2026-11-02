@@ -1,4 +1,4 @@
--- Boutique SPIN ARENA : une seule boutique par point de vente, ouverte dans l'interface Arena (onglet Boutique,
+-- Boutique ROTORBRAWL : une seule boutique par point de vente, ouverte dans l'interface Arena (onglet Boutique,
 -- catégories internes). Le catalogue et les prix viennent de config/server.lua, jamais du client ; chaque achat
 -- (Shop.buy) revérifie la boutique, la distance de 3 m, le prix, l'argent et la place, puis débite et livre via
 -- ox_inventory 2.45.0 (remboursement si la livraison échoue). Une toupie achetée reçoit son identifiant par le
@@ -10,10 +10,10 @@ local Shop = { points = {}, active = false, hooks = false, unresolved = {} }
 Shop.TYPE = 'spinarena'
 Shop.CATEGORY_ORDER = { 'tops', 'launchers', 'parts', 'repair' }
 Shop.CATEGORIES = {
-    tops      = { type = 'spinarena_tops',      name = 'SPIN ARENA — Toupies',          item = 'spin_top',        label = 'Toupies' },
-    launchers = { type = 'spinarena_launchers', name = 'SPIN ARENA — Lanceurs',         item = 'spin_launcher',   label = 'Lanceurs' },
-    parts     = { type = 'spinarena_parts',     name = 'SPIN ARENA — Pièces détachées', item = 'spin_part',       label = 'Pièces détachées' },
-    repair    = { type = 'spinarena_repair',    name = 'SPIN ARENA — Réparation',       item = 'spin_repair_kit', label = 'Réparation' },
+    tops      = { type = 'spinarena_tops',      name = 'ROTORBRAWL — Toupies',          item = 'spin_top',        label = 'Toupies' },
+    launchers = { type = 'spinarena_launchers', name = 'ROTORBRAWL — Lanceurs',         item = 'spin_launcher',   label = 'Lanceurs' },
+    parts     = { type = 'spinarena_parts',     name = 'ROTORBRAWL — Pièces détachées', item = 'spin_part',       label = 'Pièces détachées' },
+    repair    = { type = 'spinarena_repair',    name = 'ROTORBRAWL — Réparation',       item = 'spin_repair_kit', label = 'Réparation' },
 }
 -- Objets non empilables : un seul exemplaire par achat
 Shop.SINGLE = { spin_top = true, spin_launcher = true }

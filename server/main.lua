@@ -101,7 +101,7 @@ end)
 -- /spin_admin list | cancel <matchId> : réservé aux administrateurs (ACE command.spin_admin)
 RegisterCommand('spin_admin', function(src, args)
     local function reply(msg)
-        if src == 0 then log('%s', msg) else TriggerClientEvent('chat:addMessage', src, { args = { 'SPIN ARENA', msg } }) end
+        if src == 0 then log('%s', msg) else TriggerClientEvent('chat:addMessage', src, { args = { 'ROTORBRAWL', msg } }) end
     end
     if args[1] == 'arena' or args[1] == 'zone' then
         SpinArena.Arenas.admin(src, args, reply)

@@ -239,7 +239,7 @@
                 ? ('Toupie active : <strong>' + esc(activeTop.name) + ' [' + esc(activeTop.uid) + ']</strong> • Famille : ' +
                     esc(activeTop.familyLabel) + ' • Budget : ' + esc(activeTop.cost) + '/' + esc(activeTop.budget) +
                     ' pts • Usure : ' + esc(activeTop.wear) + '/' + esc(activeTop.wearMax))
-                : 'Aucune toupie complète équipée. Rends-toi auprès du <strong>vendeur Spin Arena sur la carte</strong> (cible <em>ox_target</em>) pour acheter une toupie, un lanceur ou des pièces, puis assemble-la dans ton <strong>inventaire</strong> en glissant les pièces sur la toupie.') +
+                : 'Aucune toupie complète équipée. Rends-toi auprès du <strong>vendeur RotorBrawl sur la carte</strong> (cible <em>ox_target</em>) pour acheter une toupie, un lanceur ou des pièces, puis assemble-la dans ton <strong>inventaire</strong> en glissant les pièces sur la toupie.') +
             "</div></div>";
 
         var gridHtml = '<div class="home-grid">' +
@@ -525,7 +525,7 @@
         // console (F8 / nui_devtools), pour ne pas masquer le défaut
         return '<span class="sx-vis">' +
             '<img class="sx-img' + (big ? ' big' : '') + '" src="img/' + key + '.webp" alt="" loading="lazy" decoding="async" draggable="false" ' +
-            'onerror="this.parentNode.classList.add(\'img-failed\');console.error(\'SPIN ARENA : image non servie \' + this.getAttribute(\'src\'))">' +
+            'onerror="this.parentNode.classList.add(\'img-failed\');console.error(\'ROTORBRAWL : image non servie \' + this.getAttribute(\'src\'))">' +
             svg + '</span>';
     }
 
@@ -652,7 +652,7 @@
         // La fiche suit toujours un article VISIBLE : changer de catégorie sélectionne le premier
         if (!items.some(function (it) { return it.id === state.shopSel; })) { state.shopSel = items[0] ? items[0].id : null; state.shopQty = 1; }
         var side = '<nav class="shp-side" aria-label="Catégories">' +
-            '<div class="shp-title"><span class="shp-title-main">SPIN ARENA</span>' +
+            '<div class="shp-title"><span class="shp-title-main">ROTORBRAWL</span>' +
             '<span class="shp-title-sub">Boutique' + (shop.label ? ' · ' + esc(shop.label) : '') + '</span></div><div class="shp-cats" role="tablist">';
         for (var i = 0; i < tabs.length; i++) {
             var t = tabs[i], on = t.key === tab;
