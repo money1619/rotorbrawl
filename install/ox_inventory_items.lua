@@ -1,4 +1,5 @@
 -- ROTORBRAWL — objets à ajouter dans ox_inventory/data/items.lua (format d'ox_inventory 2.45.0)
+-- (EN) Items to add to ox_inventory/data/items.lua (ox_inventory 2.45.0 format); descriptions are bilingual EN / FR, labels are French: edit them for your server language.
 -- Copiez les entrées ci-dessous dans la table renvoyée par data/items.lua, puis redémarrez ox_inventory.
 --
 -- spin_top  : non empilable ; metadata.uid est attribué par ROTORBRAWL (hook createItem). metadata.kit facultatif
@@ -15,7 +16,7 @@ return {
         weight = 200,
         stack = false,
         close = true,
-        description = 'Toupie ROTORBRAWL',
+        description = 'ROTORBRAWL battle top / Toupie ROTORBRAWL',
         -- Boutons de l'inventaire (clic droit), décision de Money du 19/10 : démonter (toutes les pièces reviennent),
         -- renommer, peindre. Événements client LOCAUX ; le serveur Chaos_Arena revalide tout (propriétaire, verrou,
         -- match, nom UTF-8). Pris en compte par ox_inventory seulement à son redémarrage (docs/ACTIVATION_DEMONTER.md).
@@ -45,7 +46,7 @@ return {
         weight = 50,
         stack = true,
         close = false,
-        description = 'Pièce de rechange pour l\'atelier ROTORBRAWL',
+        description = "Spare part for the ROTORBRAWL workshop / Pièce de rechange pour l'atelier ROTORBRAWL",
     },
     -- Un seul objet pour tous les lanceurs : le type est dans metadata.launcher (cord, crank, spring, precision, rail,
     -- config/parts.lua), par exemple exports.ox_inventory:AddItem(src, 'spin_launcher', 1, { launcher = 'crank', label = 'Lanceur Manivelle' }).
@@ -55,7 +56,7 @@ return {
         weight = 150,
         stack = false,
         close = true,
-        description = 'Lanceur de toupie ROTORBRAWL',
+        description = 'ROTORBRAWL top launcher / Lanceur de toupie ROTORBRAWL',
     },
     ['spin_repair_kit'] = {
         label = 'Kit de réparation',
