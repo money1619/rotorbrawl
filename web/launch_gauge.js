@@ -113,7 +113,7 @@
             if (s.phase === 'countdown') {
                 const left = s.goAt - t;
                 if (left > 0) { els.label.textContent = 'Départ dans ' + Math.ceil(left / 1000) + '…'; els.timer.textContent = ''; if (els.label.classList) els.label.classList.remove('rip'); }
-                else { s.phase = 'go'; els.label.textContent = 'LANCEZ !'; if (els.label.classList) els.label.classList.add('rip'); }
+                else { s.phase = 'go'; els.label.textContent = 'LANCEZ !'; if (els.label.classList) els.label.classList.add('go'); }
                 return;
             }
             if (s.phase === 'aim' || s.phase === 'grip') {
